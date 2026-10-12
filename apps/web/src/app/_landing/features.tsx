@@ -3,20 +3,29 @@ import type { ReactNode } from "react";
 import { ArrowUpRight, Check } from "lucide-react";
 
 const CHIP =
-  "border-border text-muted-foreground rounded-full border px-2.5 py-0.5 font-mono text-[11px]";
+  "border-border text-muted-foreground rounded-sm border px-2 py-0.5 font-mono text-[11px]";
 
-type Feature = { title: string; body: string; detail: ReactNode };
+type Feature = {
+  title: string;
+  body: string;
+  detail: ReactNode;
+  /** Columns out of six at lg. */
+  span: string;
+  tinted?: boolean;
+};
 
 const FEATURES: Feature[] = [
   {
     title: "Directory",
     body: "Find batchmates by department, batch, company or city.",
+    span: "lg:col-span-4",
+    tinted: true,
     detail: (
       <div className="flex -space-x-2">
-        {["AK", "RS", "TP", "MN"].map((i) => (
+        {["TL", "RD", "NB", "PK", "YT"].map((i) => (
           <span
             key={i}
-            className="bg-muted border-background flex size-8 items-center justify-center rounded-full border-2 text-[10px] font-semibold"
+            className="bg-background border-border text-foreground flex size-9 items-center justify-center rounded-md border text-[11px] font-semibold"
           >
             {i}
           </span>
@@ -27,39 +36,44 @@ const FEATURES: Feature[] = [
   {
     title: "Mentorship",
     body: "Ask alumni who have walked the path before you.",
-    detail: <span className={CHIP}>CSE &rsquo;15 &rarr; CSE &rsquo;26</span>,
+    span: "lg:col-span-2",
+    detail: <span className={CHIP}>ECE 2016 to ECE 2027</span>,
   },
   {
     title: "Jobs & internships",
     body: "Openings shared by alumni and reviewed before they go live.",
+    span: "lg:col-span-2",
     detail: (
-      <span className="bg-success/10 text-success flex items-center gap-1 rounded-full px-2.5 py-0.5 font-mono text-[11px]">
-        <Check className="size-3" /> Reviewed
+      <span className="text-success border-success/30 flex items-center gap-1 rounded-sm border px-2 py-0.5 font-mono text-[11px]">
+        <Check aria-hidden className="size-3" /> Reviewed
       </span>
     ),
   },
   {
     title: "Events",
-    body: "Meetups, talks and reunions, online and in your city.",
+    body: "Reunions, talks and meetups, on campus, online and in your city.",
+    span: "lg:col-span-4",
+    tinted: true,
     detail: (
-      <span className="border-border flex flex-col items-center rounded-md border px-2.5 py-1 leading-none">
-        <span className="text-brand font-mono text-[9px] tracking-widest">
+      <span className="bg-background border-border flex flex-col items-center rounded-md border px-3 py-1.5 leading-none">
+        <span className="text-brand font-mono text-[10px] tracking-widest">
           SAT
         </span>
-        <span className="font-display text-xl">14</span>
+        <span className="font-display mt-0.5 text-2xl font-semibold">14</span>
       </span>
     ),
   },
   {
     title: "Messages",
     body: "Direct and group conversations with the people you know.",
+    span: "lg:col-span-3",
     detail: (
-      <span className="flex flex-col items-end gap-1">
-        <span className="bg-muted rounded-full rounded-br-sm px-2.5 py-1 text-[11px]">
-          Coffee this weekend?
+      <span className="flex flex-col items-start gap-1">
+        <span className="bg-muted rounded-md rounded-bl-sm px-2.5 py-1 text-[11px]">
+          In Itanagar this weekend?
         </span>
-        <span className="bg-brand text-brand-foreground rounded-full rounded-br-sm px-2.5 py-1 text-[11px]">
-          Yes!
+        <span className="bg-primary text-primary-foreground self-end rounded-md rounded-br-sm px-2.5 py-1 text-[11px]">
+          Saturday works.
         </span>
       </span>
     ),
@@ -67,64 +81,59 @@ const FEATURES: Feature[] = [
   {
     title: "Achievements",
     body: "Share milestones; the institute reviews them before they reach the feed.",
+    span: "lg:col-span-3",
     detail: <span className={CHIP}>Institute-reviewed</span>,
   },
 ];
 
 /**
- * Editorial index of what members can do; every row leads to sign-up (or the
- * app when signed in).
+ * What members can do, as a hairline grid of uneven tiles; every tile leads to
+ * sign-up (or the app when signed in).
  */
 export function Features({ signedIn }: { signedIn: boolean }) {
   const href = signedIn ? "/dashboard" : "/register";
   return (
     <section aria-label="What you can do" className="py-24 lg:py-32">
-      <div className="mx-auto max-w-6xl px-4 sm:px-8">
-        <div className="grid gap-6 lg:grid-cols-2 lg:items-end">
-          <div>
-            <p className="text-brand font-mono text-xs tracking-[0.2em] uppercase">
-              What you can do
-            </p>
-            <h2 className="font-display mt-4 text-4xl leading-[1.05] tracking-tight text-balance sm:text-5xl lg:text-6xl">
-              Everything your batch needs, in one place.
-            </h2>
-          </div>
-          <p className="text-muted-foreground max-w-md text-lg lg:justify-self-end">
-            Verified once by the institute. After that, six ways back to the
-            people you studied with.
-          </p>
-        </div>
+      <div className="mx-auto max-w-7xl px-4 sm:px-8">
+        <h2 className="font-display max-w-2xl text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl">
+          Everything the network does for you
+        </h2>
+        <p className="text-muted-foreground mt-5 max-w-[60ch] text-lg text-pretty">
+          Verified once by the institute. After that, six ways back to the
+          people you studied and worked with.
+        </p>
 
-        <ol className="border-border mt-16 border-t">
-          {FEATURES.map(({ title, body, detail }, i) => (
-            <li key={title} className="border-border border-b">
+        <ul className="border-border mt-14 grid border-t border-l sm:grid-cols-2 lg:grid-cols-6">
+          {FEATURES.map(({ title, body, detail, span, tinted }) => (
+            <li
+              key={title}
+              className={`border-border border-r border-b ${span}`}
+            >
               <Link
                 href={href}
-                className="group hover:bg-muted/50 focus-visible:ring-ring -mx-4 grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 px-4 py-6 transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none sm:grid-cols-[3.5rem_minmax(0,1fr)_minmax(0,1.1fr)_9rem_auto] sm:py-8"
+                className={`group focus-visible:ring-ring flex h-full min-h-56 flex-col justify-between gap-10 p-6 transition-colors duration-200 hover:bg-muted/70 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:p-8 ${tinted ? "bg-muted/40" : ""}`}
               >
-                <span className="text-muted-foreground font-mono text-xs">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-display group-hover:text-brand text-3xl tracking-tight transition-[color,translate] duration-300 group-hover:translate-x-1.5 sm:text-4xl">
-                  {title}
-                </h3>
-                <ArrowUpRight
-                  aria-hidden
-                  className="text-muted-foreground group-hover:text-brand size-5 transition-[color,rotate] duration-300 group-hover:rotate-45 sm:order-last"
-                />
-                <p className="text-muted-foreground col-start-2 col-end-4 text-sm leading-relaxed sm:col-auto sm:text-base">
-                  {body}
-                </p>
-                <div
-                  aria-hidden
-                  className="hidden justify-end opacity-70 transition-opacity duration-300 group-hover:opacity-100 sm:flex"
-                >
+                <div aria-hidden className="flex min-h-10 items-start">
                   {detail}
+                </div>
+                <div>
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="font-display text-2xl font-semibold tracking-tight sm:text-[1.75rem]">
+                      {title}
+                    </h3>
+                    <ArrowUpRight
+                      aria-hidden
+                      className="text-muted-foreground group-hover:text-brand size-5 shrink-0 transition-[color,translate] duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </div>
+                  <p className="text-muted-foreground mt-2 max-w-[44ch] leading-relaxed">
+                    {body}
+                  </p>
                 </div>
               </Link>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
   );

@@ -45,10 +45,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/**
- * Low-poly ridges over a dawn wash, echoing the landing and the DawnMark.
- * Decorative.
- */
+/** Ridgelines over a navy wash, echoing the landing crest. Decorative. */
 function Cover() {
   return (
     <div
@@ -56,7 +53,7 @@ function Cover() {
       className="relative h-28 overflow-hidden sm:h-40"
       style={{
         background:
-          "radial-gradient(60% 120% at 70% 110%, color-mix(in oklch, var(--brand) 55%, transparent), transparent 70%), linear-gradient(135deg, color-mix(in oklch, var(--chart-5) 35%, var(--background)), color-mix(in oklch, var(--brand) 25%, var(--background)))",
+          "radial-gradient(60% 120% at 70% 110%, color-mix(in oklch, var(--brand) 30%, transparent), transparent 70%), linear-gradient(135deg, color-mix(in oklch, var(--primary) 18%, var(--background)), color-mix(in oklch, var(--brand) 14%, var(--background)))",
       }}
     >
       <svg

@@ -62,7 +62,9 @@ describe("PublicShell", () => {
       "href",
       "/register"
     );
-    expect(footer.getByText(/NIT Arunachal Pradesh$/)).toBeInTheDocument();
+    expect(
+      footer.getByText(/^© \d{4} NIT Arunachal Pradesh$/)
+    ).toBeInTheDocument();
     unmount();
 
     render(<PublicShell signedIn>x</PublicShell>);

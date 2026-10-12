@@ -14,7 +14,7 @@ import {
   SheetTrigger,
 } from "@nitap/ui/components/sheet";
 
-import { DawnMark } from "@/components/brand/dawn-mark";
+import { Crest } from "@/components/brand/crest";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -55,7 +55,7 @@ export function MobileBar({
           aria-label={`${siteConfig.shortName} home`}
           className={cn("mr-auto rounded-md", FOCUS)}
         >
-          <DawnMark />
+          <Crest />
         </Link>
         <Button
           variant="ghost"

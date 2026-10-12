@@ -32,7 +32,7 @@ import {
   SheetTrigger,
 } from "@nitap/ui/components/sheet";
 
-import { Wordmark } from "@/components/brand/dawn-mark";
+import { Wordmark } from "@/components/brand/crest";
 import { cn } from "@/lib/utils";
 import type { NavGroup, NavIcon } from "@/modules/admin";
 

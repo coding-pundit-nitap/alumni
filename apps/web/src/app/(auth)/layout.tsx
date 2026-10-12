@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { Wordmark } from "@/components/brand/dawn-mark";
+import { Ridgelines } from "@/components/brand/ridgelines";
+import { Seal, Wordmark } from "@/components/brand/crest";
 
 const HOME_LINK =
   "focus-visible:ring-ring rounded-md focus-visible:ring-2 focus-visible:outline-none";
@@ -11,32 +12,16 @@ export default function AuthLayout({
   return (
     <div className="grid min-h-svh lg:grid-cols-[1.1fr_1fr]">
       <aside className="dark bg-background text-foreground relative hidden overflow-hidden lg:flex lg:flex-col lg:justify-between lg:p-12">
-        <div aria-hidden className="dawn-glow absolute inset-0 -scale-y-100" />
-        <svg
-          aria-hidden
-          viewBox="0 0 600 200"
-          preserveAspectRatio="none"
-          className="absolute inset-x-0 bottom-0 h-56 w-full"
-        >
-          <circle cx="400" cy="150" r="60" fill="var(--brand)" opacity="0.35" />
-          <polygon
-            points="0,200 0,130 120,60 220,140 300,90 420,160 520,80 600,120 600,200"
-            fill="currentColor"
-            opacity="0.06"
-          />
-          <polygon
-            points="0,200 0,170 90,120 200,175 330,110 460,180 560,140 600,160 600,200"
-            fill="currentColor"
-            opacity="0.1"
-          />
-        </svg>
+        <Ridgelines className="absolute inset-x-0 bottom-0 h-64 opacity-60" />
         <Link href="/" className={`relative self-start ${HOME_LINK}`}>
           <Wordmark />
         </Link>
-        <blockquote className="font-display relative max-w-lg text-4xl leading-tight text-balance">
-          Every sunrise in Arunachal starts a little earlier. So does your
-          network.
-        </blockquote>
+        <div className="relative">
+          <Seal className="w-28" />
+          <p className="font-display mt-8 max-w-md text-4xl leading-tight font-semibold tracking-tight text-balance">
+            The official alumni network of NIT Arunachal Pradesh.
+          </p>
+        </div>
         <p className="text-muted-foreground relative text-sm">
           Verified by NIT Arunachal Pradesh
         </p>

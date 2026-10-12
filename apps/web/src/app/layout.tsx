@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
-import {
-  Geist_Mono,
-  Instrument_Sans,
-  Instrument_Serif,
-} from "next/font/google";
+import { IBM_Plex_Mono, Public_Sans, Source_Serif_4 } from "next/font/google";
 
 import { siteConfig } from "@/config/site";
 import { NONCE_HEADER } from "@/infrastructure/http/security-headers";
@@ -12,17 +8,21 @@ import { THEME_SCRIPT } from "@/lib/theme";
 import { Providers } from "@/providers";
 import "./globals.css";
 
-const sans = Instrument_Sans({
-  variable: "--font-instrument-sans",
+const sans = Public_Sans({
+  variable: "--font-public-sans",
   subsets: ["latin"],
 });
-const display = Instrument_Serif({
-  variable: "--font-instrument-serif",
+const display = Source_Serif_4({
+  variable: "--font-source-serif",
   subsets: ["latin"],
-  weight: "400",
   style: ["normal", "italic"],
+  axes: ["opsz"],
 });
-const mono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const mono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
 
 export const metadata: Metadata = {
   title: { default: siteConfig.name, template: `%s | ${siteConfig.name}` },
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbf9f5" },
-    { media: "(prefers-color-scheme: dark)", color: "#12141f" },
+    { media: "(prefers-color-scheme: light)", color: "#f9fafc" },
+    { media: "(prefers-color-scheme: dark)", color: "#141c2e" },
   ],
 };
 

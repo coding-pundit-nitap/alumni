@@ -11,7 +11,7 @@ test.describe("Landing", () => {
   test("a visitor sees the pitch and can join", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Your batch, still within reach."
+      "Stay connected to the institute that shaped you."
     );
     await expect(
       page.getByRole("link", { name: "Join the network" }).first()

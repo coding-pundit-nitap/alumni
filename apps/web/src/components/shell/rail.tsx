@@ -11,7 +11,7 @@ import {
   TooltipTrigger,
 } from "@nitap/ui/components/tooltip";
 
-import { DawnMark, Wordmark } from "@/components/brand/dawn-mark";
+import { Crest, Wordmark } from "@/components/brand/crest";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -54,7 +54,7 @@ export function Rail({
           <span className="hidden lg:block">
             <Wordmark compact />
           </span>
-          <DawnMark className="lg:hidden" />
+          <Crest className="lg:hidden" />
         </Link>
         <button
           type="button"
