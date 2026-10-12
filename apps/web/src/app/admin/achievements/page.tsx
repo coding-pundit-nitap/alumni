@@ -33,7 +33,7 @@ export default async function AdminAchievementsPage({
   }
 
   return (
-    <div className="flex max-w-3xl flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader
         title="Achievements awaiting review"
         description="Member wins waiting to be published."

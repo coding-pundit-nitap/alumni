@@ -16,11 +16,12 @@ describe("PageColumns", () => {
     ).toHaveTextContent("rail");
   });
 
-  it("centres a lone column", () => {
+  it("lets a lone column fill the frame", () => {
     render(<PageColumns>body</PageColumns>);
     expect(screen.queryByRole("banner")).toBeNull();
     expect(screen.queryByRole("complementary")).toBeNull();
-    expect(screen.getByText("body").parentElement).toHaveClass(
+    expect(screen.getByText("body")).toHaveClass("flex-1");
+    expect(screen.getByText("body").parentElement).not.toHaveClass(
       "justify-center"
     );
   });

@@ -155,9 +155,12 @@ export function FeedList({
   return (
     <div>
       {pinned ? (
-        <section aria-label="Pinned announcement" className="border-b">
-          <p className="text-muted-foreground flex items-center gap-1.5 px-4 pt-3 text-[11px] font-medium tracking-wide uppercase sm:px-5">
-            <Pin aria-hidden className="size-3" />
+        <section
+          aria-label="Pinned announcement"
+          className="from-brand/[0.06] border-b bg-gradient-to-b to-transparent to-70%"
+        >
+          <p className="text-brand flex items-center gap-1.5 px-4 pt-4 text-xs font-semibold sm:px-5">
+            <Pin aria-hidden className="size-3.5" />
             Pinned
           </p>
           <PostCard

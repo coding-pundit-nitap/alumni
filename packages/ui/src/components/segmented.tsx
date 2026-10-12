@@ -12,7 +12,7 @@ function Segmented({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="segmented"
       className={cn(
-        "bg-muted/70 inline-flex items-center gap-0.5 rounded-full border p-0.5",
+        "bg-background inline-flex items-center gap-0.5 rounded-lg border p-0.5",
         className
       )}
       {...props}
@@ -21,12 +21,12 @@ function Segmented({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 const segmentedItemVariants = cva(
-  "focus-visible:ring-ring inline-flex h-7 items-center gap-1.5 rounded-full px-3.5 text-xs font-medium whitespace-nowrap transition-[color,background-color,box-shadow] duration-200 outline-none focus-visible:ring-2",
+  "focus-visible:ring-ring inline-flex h-7 items-center gap-1.5 rounded-md px-3 text-[13px] font-semibold whitespace-nowrap transition-[color,background-color,box-shadow] duration-150 outline-none focus-visible:ring-2",
   {
     variants: {
       active: {
-        true: "bg-background text-foreground shadow-[0_1px_2px_0_color-mix(in_oklch,var(--foreground)_12%,transparent)]",
-        false: "text-muted-foreground hover:text-foreground",
+        true: "bg-brand/10 text-brand inset-ring-brand/45 inset-ring",
+        false: "text-muted-foreground hover:bg-muted hover:text-foreground",
       },
     },
     defaultVariants: { active: false },

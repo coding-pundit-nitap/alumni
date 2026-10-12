@@ -279,19 +279,34 @@ export function PostComposer({
 
   if (!expanded) {
     return (
-      <div className="flex items-center gap-3">
+      <div className="flex gap-3">
         {author ? <PostAuthorAvatar author={author} size="lg" /> : null}
+        {/* One button for the whole prompt: the icons and Post below are a preview of the open composer. */}
         <button
           id="compose"
           type="button"
           onClick={expand}
           onFocus={expand}
-          className="text-muted-foreground hover:border-foreground/20 hover:text-foreground bg-muted/40 flex h-10 flex-1 items-center justify-between rounded-full border px-4 text-left text-sm transition-colors duration-150"
+          className="group/compose focus-visible:ring-ring flex min-w-0 flex-1 flex-col gap-3 rounded-lg text-left outline-none focus-visible:ring-2 focus-visible:ring-offset-4"
         >
-          Share something with your batchmates…
-          <span className="flex items-center gap-2" aria-hidden>
-            <ImagePlus className="size-4" />
-            <Link2 className="size-4" />
+          <span className="text-muted-foreground group-hover/compose:text-foreground/80 flex h-10 items-center text-[15px] transition-colors duration-150">
+            Share something with your batchmates…
+          </span>
+          <span aria-hidden className="flex w-full items-center gap-1">
+            <span className="text-muted-foreground group-hover/compose:text-foreground flex size-8 items-center justify-center rounded-md transition-colors duration-150">
+              <ImagePlus className="size-[18px]" />
+            </span>
+            <span className="text-muted-foreground group-hover/compose:text-foreground flex size-8 items-center justify-center rounded-md transition-colors duration-150">
+              <Link2 className="size-[18px]" />
+            </span>
+            <span
+              className={cn(
+                buttonVariants({ variant: "brand", size: "sm" }),
+                "ml-auto px-4 opacity-60"
+              )}
+            >
+              Post
+            </span>
           </span>
         </button>
       </div>
@@ -299,131 +314,139 @@ export function PostComposer({
   }
 
   return (
-    <form
-      method="post"
-      onSubmit={onFormSubmit}
-      className="animate-in fade-in space-y-3 duration-200"
-    >
-      <Textarea
-        ref={textareaRef}
-        aria-label="Post content"
-        value={content}
-        maxLength={MAX_CONTENT}
-        onChange={(event) => setContent(event.target.value)}
-        onKeyDown={onTextareaKeyDown}
-        className="border-0 bg-transparent px-0 text-base shadow-none focus-visible:ring-0 md:text-base"
-      />
-
-      {slots.length > 0 ? (
-        <div className="flex flex-wrap gap-2">
-          {slots.map((slot, index) => (
-            <div
-              key={slot.key}
-              className="bg-muted relative size-20 overflow-hidden rounded-lg border"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview, not an optimizable remote image */}
-              <img
-                src={slot.previewUrl}
-                alt=""
-                className="size-full object-cover"
-              />
-              {slot.phase === "working" ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                  <Loader2
-                    className="size-5 animate-spin text-white"
-                    aria-hidden="true"
-                  />
-                </div>
-              ) : null}
-              {slot.phase === "error" ? (
-                <div
-                  className="bg-destructive/70 absolute inset-0"
-                  title={slot.message}
-                />
-              ) : null}
-              <button
-                type="button"
-                aria-label={`Remove image ${index + 1}`}
-                onClick={() => removeSlot(slot.key)}
-                className="absolute top-1 right-1 rounded-full bg-black/60 p-0.5 text-white hover:bg-black/80"
-              >
-                <X className="size-3" aria-hidden="true" />
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : null}
-
-      {showLink ? (
-        <div className="space-y-1.5">
-          <label htmlFor={linkId} className="text-sm font-medium">
-            Link (https)
-          </label>
-          <Input
-            id={linkId}
-            type="url"
-            value={linkUrl}
-            onChange={(event) => setLinkUrl(event.target.value)}
-            placeholder="https://…"
-          />
-        </div>
-      ) : null}
-
-      {error ? (
-        <p role="alert" className="text-destructive text-sm">
-          {error}
-        </p>
-      ) : null}
-
-      <div className="flex items-center gap-1">
-        <label
-          htmlFor={fileInputId}
-          className={cn(
-            buttonVariants({ variant: "ghost", size: "sm" }),
-            "cursor-pointer",
-            imagesFull && "pointer-events-none opacity-50"
-          )}
-        >
-          <ImagePlus aria-hidden="true" />
-          <span className="hidden sm:inline">Add images</span>
-        </label>
-        <input
-          id={fileInputId}
-          type="file"
-          multiple
-          accept="image/jpeg,image/png,image/webp"
-          aria-label="Add images"
-          disabled={imagesFull}
-          onChange={onFilesChange}
-          className="sr-only"
+    <div className="flex gap-3">
+      {author ? <PostAuthorAvatar author={author} size="lg" /> : null}
+      <form
+        method="post"
+        onSubmit={onFormSubmit}
+        className="animate-in fade-in min-w-0 flex-1 space-y-3 duration-200"
+      >
+        <Textarea
+          ref={textareaRef}
+          aria-label="Post content"
+          value={content}
+          maxLength={MAX_CONTENT}
+          onChange={(event) => setContent(event.target.value)}
+          onKeyDown={onTextareaKeyDown}
+          className="min-h-24 border-0 bg-transparent px-0 pt-2 text-[15px] shadow-none focus-visible:ring-0 md:text-[15px]"
         />
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          aria-pressed={showLink}
-          onClick={() => setShowLink((prev) => !prev)}
-        >
-          <Link2 aria-hidden="true" />
-          <span className="hidden sm:inline">Add link</span>
-        </Button>
-
-        {content.length > COUNTER_THRESHOLD ? (
-          <span className="text-muted-foreground text-xs">
-            {content.length}/{MAX_CONTENT}
-          </span>
+        {slots.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {slots.map((slot, index) => (
+              <div
+                key={slot.key}
+                className="bg-muted relative size-20 overflow-hidden rounded-lg border"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview, not an optimizable remote image */}
+                <img
+                  src={slot.previewUrl}
+                  alt=""
+                  className="size-full object-cover"
+                />
+                {slot.phase === "working" ? (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                    <Loader2
+                      className="size-5 animate-spin text-white"
+                      aria-hidden="true"
+                    />
+                  </div>
+                ) : null}
+                {slot.phase === "error" ? (
+                  <div
+                    className="bg-destructive/70 absolute inset-0"
+                    title={slot.message}
+                  />
+                ) : null}
+                <button
+                  type="button"
+                  aria-label={`Remove image ${index + 1}`}
+                  onClick={() => removeSlot(slot.key)}
+                  className="absolute top-1 right-1 rounded-full bg-black/60 p-0.5 text-white hover:bg-black/80"
+                >
+                  <X className="size-3" aria-hidden="true" />
+                </button>
+              </div>
+            ))}
+          </div>
         ) : null}
 
-        <div className="ml-auto flex items-center gap-1.5">
-          <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
-            Cancel
+        {showLink ? (
+          <div className="space-y-1.5">
+            <label htmlFor={linkId} className="text-sm font-medium">
+              Link (https)
+            </label>
+            <Input
+              id={linkId}
+              type="url"
+              value={linkUrl}
+              onChange={(event) => setLinkUrl(event.target.value)}
+              placeholder="https://…"
+            />
+          </div>
+        ) : null}
+
+        {error ? (
+          <p role="alert" className="text-destructive text-sm">
+            {error}
+          </p>
+        ) : null}
+
+        <div className="flex items-center gap-1">
+          <label
+            htmlFor={fileInputId}
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "cursor-pointer",
+              imagesFull && "pointer-events-none opacity-50"
+            )}
+          >
+            <ImagePlus aria-hidden="true" />
+            <span className="hidden sm:inline">Add images</span>
+          </label>
+          <input
+            id={fileInputId}
+            type="file"
+            multiple
+            accept="image/jpeg,image/png,image/webp"
+            aria-label="Add images"
+            disabled={imagesFull}
+            onChange={onFilesChange}
+            className="sr-only"
+          />
+
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            aria-pressed={showLink}
+            onClick={() => setShowLink((prev) => !prev)}
+          >
+            <Link2 aria-hidden="true" />
+            <span className="hidden sm:inline">Add link</span>
           </Button>
-          <Button type="submit" variant="brand" size="sm" disabled={!canSubmit}>
-            {submitting ? "Posting…" : "Post"}
-          </Button>
+
+          {content.length > COUNTER_THRESHOLD ? (
+            <span className="text-muted-foreground text-xs">
+              {content.length}/{MAX_CONTENT}
+            </span>
+          ) : null}
+
+          <div className="ml-auto flex items-center gap-1.5">
+            <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="brand"
+              size="sm"
+              disabled={!canSubmit}
+            >
+              {submitting ? "Posting…" : "Post"}
+            </Button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }

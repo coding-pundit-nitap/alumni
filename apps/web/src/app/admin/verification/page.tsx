@@ -35,7 +35,7 @@ export default async function VerificationQueuePage({
   }
 
   return (
-    <div className="flex max-w-3xl flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader
         title="Verification requests"
         description="Alumni waiting for you to confirm who they are, oldest first."

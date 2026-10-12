@@ -381,7 +381,7 @@ export function PostCard({
         "px-4 sm:px-5",
         expanded
           ? "pt-5"
-          : "hover:bg-muted/25 pt-4 pb-2 transition-colors duration-200"
+          : "hover:bg-muted/30 pt-5 pb-3 transition-colors duration-200"
       )}
     >
       <div className="flex items-start justify-between gap-2">
@@ -525,7 +525,7 @@ export function PostCard({
                   ? "1 comment"
                   : `${post.commentCount} comments`
             }
-            className={`${ACTION} hover:bg-chart-4/10 hover:text-chart-4`}
+            className={`${ACTION} hover:bg-muted hover:text-foreground`}
           >
             <MessageCircle aria-hidden className="size-[17px]" />
             {post.commentCount > 0 ? post.commentCount : null}
@@ -534,8 +534,8 @@ export function PostCard({
             type="button"
             aria-label="Copy link to post"
             onClick={handleShare}
-            className={`${ACTION} hover:bg-chart-3/10 hover:text-chart-3 ${
-              shareStatus === "copied" ? "text-chart-3" : ""
+            className={`${ACTION} hover:bg-muted hover:text-foreground ${
+              shareStatus === "copied" ? "text-brand" : ""
             }`}
           >
             {shareStatus === "copied" ? (

@@ -43,7 +43,7 @@ export function UsersTable({ rows }: { rows: UserRow[] }) {
     );
   return (
     <Table>
-      <TableHeader className="bg-muted/40 text-muted-foreground sticky top-0 text-xs tracking-wide uppercase">
+      <TableHeader className="bg-muted/40 text-muted-foreground sticky top-0 text-xs">
         <TableRow>
           <TableHead>Name</TableHead>
           <TableHead>State</TableHead>

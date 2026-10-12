@@ -65,7 +65,14 @@ export function ReportDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        render={<Button type="button" variant="outline" size="sm" />}
+        render={
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-foreground"
+          />
+        }
       >
         Report
       </DialogTrigger>

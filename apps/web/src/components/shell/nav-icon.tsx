@@ -54,12 +54,16 @@ const ICONS: Record<NavIconName, LucideIcon> = {
 export function NavIcon({
   name,
   className,
+  strokeWidth,
 }: {
   name: NavIconName;
   className?: string;
+  strokeWidth?: number;
 }) {
   const Icon = ICONS[name];
-  return <Icon aria-hidden="true" className={className} />;
+  return (
+    <Icon aria-hidden="true" className={className} strokeWidth={strokeWidth} />
+  );
 }
 
 /**

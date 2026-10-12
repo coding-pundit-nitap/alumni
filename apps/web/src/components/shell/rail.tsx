@@ -12,6 +12,7 @@ import {
 } from "@nitap/ui/components/tooltip";
 
 import { Crest, Wordmark } from "@/components/brand/crest";
+import { Ridgelines } from "@/components/brand/ridgelines";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -44,7 +45,7 @@ export function Rail({
   );
 
   return (
-    <aside className="bg-card/40 sticky top-0 hidden h-svh shrink-0 flex-col border-r md:flex md:w-[72px] lg:w-[248px]">
+    <aside className="sticky top-0 hidden h-svh shrink-0 flex-col border-r md:flex md:w-[72px] lg:w-[248px] min-[1240px]:border-l">
       <div className="flex flex-col gap-3 px-3 pt-4 pb-3 md:items-center lg:items-stretch">
         <Link
           href="/dashboard"
@@ -79,9 +80,9 @@ export function Rail({
         className="flex-1 scrollbar-none overflow-y-auto px-3 pb-4"
       >
         {nav.groups.map((group, i) => (
-          <div key={group.label ?? i} className="mt-4 first:mt-1">
+          <div key={group.label ?? i} className="mt-5 first:mt-1">
             {group.label && (
-              <p className="text-muted-foreground mb-1 hidden px-2.5 text-xs tracking-wider uppercase lg:block">
+              <p className="text-muted-foreground/80 mb-1 hidden px-3 text-xs font-medium lg:block">
                 {group.label}
               </p>
             )}
@@ -97,18 +98,19 @@ export function Rail({
                             href={entry.href}
                             aria-current={current ? "page" : undefined}
                             className={cn(
-                              "relative flex h-9 items-center gap-3 rounded-lg px-2.5 text-sm transition-colors duration-150 md:w-10 md:justify-center md:px-0 lg:w-full lg:justify-start lg:px-2.5",
+                              "relative flex h-10 items-center gap-3 rounded-lg px-3 text-[15px] transition-colors duration-150 md:w-10 md:justify-center md:px-0 lg:w-full lg:justify-start lg:px-3",
                               FOCUS,
                               current
-                                ? "bg-brand/10 text-foreground before:bg-brand font-medium before:absolute before:inset-y-1.5 before:-left-3 before:w-[3px] before:rounded-r-full"
-                                : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                                ? "text-foreground font-semibold"
+                                : "text-foreground/70 hover:bg-muted hover:text-foreground"
                             )}
                           />
                         }
                       >
                         <NavIcon
                           name={entry.icon}
-                          className={cn("size-[18px]", current && "text-brand")}
+                          strokeWidth={current ? 2.25 : 1.75}
+                          className={cn("size-5", current && "text-brand")}
                         />
                         <span className="sr-only lg:not-sr-only">
                           {entry.label}
@@ -124,6 +126,9 @@ export function Rail({
             </ul>
           </div>
         ))}
+        {nav.groups.some((g) =>
+          g.entries.some((e) => e.href === "/donate")
+        ) && <GiveBackCard />}
       </nav>
 
       <div className="flex flex-col items-center gap-1 border-t p-3 lg:flex-row-reverse lg:items-center">
@@ -133,5 +138,36 @@ export function Rail({
         </div>
       </div>
     </aside>
+  );
+}
+
+/**
+ * The rail's one card, for members who can give: engraved ridges and the
+ * emblem, so it reads as the institute asking rather than an ad. It ends the
+ * scrolling nav, so it never covers an entry.
+ */
+function GiveBackCard() {
+  return (
+    <div className="mt-6 hidden lg:block">
+      <div className="bg-background relative isolate overflow-hidden rounded-xl border px-4 pt-4 pb-3.5">
+        <Ridgelines className="absolute inset-x-0 bottom-0 -z-10 h-20 opacity-70" />
+        <Crest className="absolute -top-3 -right-3 -z-10 w-20 opacity-[0.12]" />
+        <p className="font-display text-[1.05rem] leading-tight font-semibold">
+          Give back to NIT AP
+        </p>
+        <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+          See the campaigns the alumni office is running this year.
+        </p>
+        <Link
+          href="/donate"
+          className={cn(
+            "bg-foreground text-background mt-3 inline-flex h-8 items-center rounded-lg px-3 text-xs font-semibold transition-transform duration-150 ease-out active:scale-[0.97]",
+            FOCUS
+          )}
+        >
+          View campaigns
+        </Link>
+      </div>
+    </div>
   );
 }

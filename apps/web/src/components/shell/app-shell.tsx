@@ -18,7 +18,8 @@ export async function AppShell({ children }: { children: ReactNode }) {
   // Only VERIFIED members may read notifications; anyone else's bell would poll into 403s.
   const bell = data.verified ? <NotificationBell /> : null;
   return (
-    <div className="flex min-h-svh">
+    // One centred frame, so the rail and the columns read as a single surface on wide screens.
+    <div className="mx-auto flex min-h-svh w-full max-w-[1240px]">
       <a
         href="#main"
         className="bg-background focus-visible:ring-ring sr-only z-50 rounded-md px-3 py-2 text-sm font-medium focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus-visible:ring-2 focus-visible:outline-none"

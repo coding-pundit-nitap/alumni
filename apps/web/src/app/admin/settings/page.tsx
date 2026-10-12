@@ -19,7 +19,7 @@ export default async function AdminSettingsPage() {
   const settings = await listRetentionSettings({ actor });
 
   return (
-    <div className="flex max-w-4xl flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader
         title="Settings"
         description="How long each kind of record is kept. Every change is audited."

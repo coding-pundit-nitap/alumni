@@ -23,12 +23,11 @@ export default async function AdminLayout({
   if (items.length === 0) notFound();
 
   return (
-    <div className="flex min-h-svh flex-col md:flex-row">
+    // Same centred frame as the member shell, so moving between the two doesn't jump.
+    <div className="mx-auto flex min-h-svh w-full max-w-[1240px] flex-col md:flex-row">
       <AdminRail groups={groupAdminNav(items)} />
-      <main id="main" className="min-w-0 flex-1">
-        <div className="mx-auto w-full max-w-[1200px] px-4 py-6 sm:px-8 sm:py-8">
-          {children}
-        </div>
+      <main id="main" className="min-w-0 flex-1 md:border-r">
+        <div className="px-4 pb-10 sm:px-6">{children}</div>
       </main>
     </div>
   );

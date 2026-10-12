@@ -111,7 +111,7 @@ export default async function DashboardPage({
         </div>
       </Suspense>
       {canPost ? (
-        <div className="border-b px-4 py-3 sm:px-5">
+        <div className="border-b px-4 pt-4 pb-3 sm:px-5">
           <PostComposer
             onSubmit={createPostAction}
             presignAction={presignPostImageAction}

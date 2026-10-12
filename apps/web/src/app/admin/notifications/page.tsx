@@ -129,7 +129,7 @@ export default async function AdminNotificationsPage({
     : null;
 
   return (
-    <div className="flex max-w-3xl flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader
         title="Failed emails"
         description="Emails that could not be delivered, and ones stuck in the queue."

@@ -67,10 +67,13 @@ function Nav({
   onNavigate?: () => void;
 }) {
   return (
-    <nav aria-label="Administration" className="flex-1 px-3 pb-4">
+    <nav
+      aria-label="Administration"
+      className="flex-1 scrollbar-none overflow-y-auto px-3 pb-4"
+    >
       {groups.map((group) => (
         <div key={group.label}>
-          <p className="text-muted-foreground px-3 pt-4 pb-1 text-[11px] font-medium tracking-wider uppercase">
+          <p className="text-muted-foreground/80 px-3 pt-5 pb-1 text-xs font-medium">
             {group.label}
           </p>
           {group.items.map((item) => {
@@ -83,13 +86,17 @@ function Nav({
                 onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex h-9 items-center gap-3 rounded-lg px-3 text-sm",
+                  "focus-visible:ring-ring flex h-10 items-center gap-3 rounded-lg px-3 text-[15px] transition-colors duration-150 outline-none focus-visible:ring-2",
                   active
-                    ? "bg-brand/10 text-foreground before:bg-brand font-medium before:absolute before:inset-y-2 before:left-0 before:w-0.5 before:rounded-full"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "text-foreground font-semibold"
+                    : "text-foreground/70 hover:bg-muted hover:text-foreground"
                 )}
               >
-                <Icon aria-hidden className="size-4" />
+                <Icon
+                  aria-hidden
+                  strokeWidth={active ? 2.25 : 1.75}
+                  className={cn("size-5", active && "text-brand")}
+                />
                 {item.label}
               </Link>
             );
@@ -108,9 +115,9 @@ export function AdminRail({ groups }: { groups: NavGroup[] }) {
     <>
       <aside
         aria-label="Administration"
-        className="bg-background sticky top-0 hidden h-svh w-60 shrink-0 flex-col border-r md:flex"
+        className="sticky top-0 hidden h-svh w-[248px] shrink-0 flex-col border-r md:flex min-[1240px]:border-l"
       >
-        <div className="flex items-center gap-2 px-4 py-4">
+        <div className="flex h-[4.5rem] items-center gap-2 px-5">
           <Link href="/admin">
             <Wordmark compact />
           </Link>
@@ -120,7 +127,7 @@ export function AdminRail({ groups }: { groups: NavGroup[] }) {
         <div className="mt-auto border-t p-3">
           <Link
             href="/dashboard"
-            className="text-muted-foreground hover:text-foreground flex h-9 items-center gap-3 rounded-lg px-3 text-sm"
+            className="text-foreground/70 hover:bg-muted hover:text-foreground flex h-10 items-center gap-3 rounded-lg px-3 text-[15px] transition-colors duration-150"
           >
             <ArrowLeft aria-hidden className="size-4" />
             Back to app

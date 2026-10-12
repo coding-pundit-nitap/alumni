@@ -62,23 +62,29 @@ export function PostAuthorLine({
       <Link href={href} className="shrink-0" tabIndex={-1} aria-hidden>
         <PostAuthorAvatar author={author} size={avatarSize} />
       </Link>
-      <div className="min-w-0">
+      <div className="min-w-0 leading-tight">
         <div className="flex min-w-0 items-center gap-1.5">
           <Link
             href={href}
-            className="text-foreground truncate font-semibold tracking-tight hover:underline"
+            className="text-foreground truncate text-[15px] font-semibold tracking-tight hover:underline"
           >
             {author.fullName}
           </Link>
           {badge}
-          <span aria-hidden className="text-muted-foreground">
-            ·
-          </span>
+        </div>
+        {/* Headline, then when: the second line carries the context, like a byline. */}
+        <div className="text-muted-foreground mt-0.5 flex min-w-0 items-center gap-1 text-[13px]">
+          {author.headline ? (
+            <>
+              <span className="truncate">{author.headline}</span>
+              <span aria-hidden>·</span>
+            </>
+          ) : null}
           <time
             dateTime={createdAt.toISOString()}
             title={createdAt.toLocaleString()}
             suppressHydrationWarning
-            className="text-muted-foreground shrink-0 text-[13px]"
+            className="shrink-0"
           >
             {relativeTime(createdAt)}
           </time>
@@ -86,17 +92,12 @@ export function PostAuthorLine({
             <span
               title={`Edited ${editedAt.toLocaleString()}`}
               suppressHydrationWarning
-              className="text-muted-foreground shrink-0 text-[13px]"
+              className="shrink-0"
             >
               · edited
             </span>
           ) : null}
         </div>
-        {author.headline ? (
-          <div className="text-muted-foreground truncate text-[13px]">
-            {author.headline}
-          </div>
-        ) : null}
       </div>
     </div>
   );

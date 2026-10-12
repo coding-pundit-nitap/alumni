@@ -20,22 +20,23 @@ export function AdminPageHeader({
   children?: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4 pb-6">
-      <div>
+    // The same sticky bar as the member pages' headers; it bleeds over the layout's side padding.
+    <div className="bg-background/80 sticky top-14 z-10 -mx-4 flex min-h-14 flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b px-4 py-2.5 backdrop-blur-md sm:-mx-6 sm:px-6 md:top-0">
+      <div className="min-w-0">
         {back && (
           <Link
             href={back.href}
-            className="text-muted-foreground hover:text-foreground mb-2 inline-flex items-center gap-1 text-sm"
+            className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs"
           >
-            <ArrowLeft aria-hidden className="size-3.5" />
+            <ArrowLeft aria-hidden className="size-3" />
             {back.label}
           </Link>
         )}
-        <h1 className="flex items-center gap-3 text-2xl font-semibold tracking-tight">
+        <h1 className="flex items-center gap-2 text-base leading-tight font-semibold tracking-tight">
           {title}
         </h1>
         {description && (
-          <p className="text-muted-foreground mt-1 text-sm">{description}</p>
+          <p className="text-muted-foreground mt-0.5 text-xs">{description}</p>
         )}
         {children}
       </div>

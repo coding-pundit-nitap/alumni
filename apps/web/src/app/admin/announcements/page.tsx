@@ -47,7 +47,7 @@ export default async function AdminAnnouncementsPage({
     : null;
 
   return (
-    <div className="flex max-w-3xl flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader
         title="Announcements"
         description="Institute-wide notices. Each one is pinned on the feed for a week and sent to every member."

@@ -2,24 +2,28 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 /**
- * The shared highlights-rail shell: a hairline card in the mobile strip, an
- * open section in the xl rail.
+ * The shared highlights-rail shell: a hairline card, in the strip and the xl
+ * rail alike.
  */
 export function Block({
   title,
   href,
   more,
+  className,
   children,
 }: {
   title: React.ReactNode;
   href?: string;
   more?: string;
+  className?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="bg-card rounded-xl border p-4 xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0">
+    <section
+      className={`bg-card relative isolate shrink-0 overflow-hidden rounded-xl border p-4 ${className ?? ""}`}
+    >
       <div className="mb-2 flex items-center justify-between gap-3">
-        <h2 className="text-[15px] font-semibold tracking-tight">{title}</h2>
+        <h2 className="text-sm font-semibold tracking-tight">{title}</h2>
         {href ? (
           <Link
             href={href}

@@ -98,7 +98,7 @@ export async function Greeting({ actor }: { actor: Actor }) {
       ? result.value.fullName.trim().split(/\s+/)[0]
       : undefined;
   return (
-    <h1 className="font-display truncate text-2xl leading-none">
+    <h1 className="font-display truncate text-[1.375rem] leading-none font-semibold tracking-tight">
       {first ? (
         <>
           Welcome back, <em className="text-brand">{first}</em>
