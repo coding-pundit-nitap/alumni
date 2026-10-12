@@ -8,6 +8,7 @@
     "arch": "depcruise src tests --config ../../.dependency-cruiser.cjs --ts-config tsconfig.json",
     "build": "next build",
     "check-types": "next typegen && tsc --noEmit",
+    "db:fake": "node --env-file-if-exists=../../.env scripts/fake-seed.ts",
     "db:seed:admin": "node --env-file-if-exists=../../.env scripts/seed-dev-admin.ts",
     "dev": "next dev --port 3000",
     "lint": "oxlint --type-aware --max-warnings=0",

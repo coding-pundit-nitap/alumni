@@ -10,6 +10,7 @@
     "check-types": "turbo run check-types",
     "db:deploy": "pnpm --filter @nitap/database db:deploy",
     "db:drift": "node --env-file-if-exists=.env packages/scripts/check-migration-drift.ts",
+    "db:fake": "pnpm --filter @nitap/web db:fake",
     "db:generate": "pnpm --filter @nitap/database db:generate",
     "db:migrate": "pnpm --filter @nitap/database db:migrate",
     "db:seed": "pnpm --filter @nitap/database db:seed && pnpm --filter @nitap/web db:seed:admin",
