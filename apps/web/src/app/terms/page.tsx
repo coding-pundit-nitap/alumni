@@ -3,13 +3,15 @@ import Link from "next/link";
 
 import { LegalPage, LegalSection } from "@/components/common/legal-page";
 import { PublicShell } from "@/components/common/public-shell";
+import { publicPageMetadata } from "@/lib/seo";
 import { getActor } from "@/modules/auth";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = publicPageMetadata({
   title: "Terms of use",
   description:
     "The rules for using the NIT Arunachal Pradesh Alumni Network: who may join, how to behave, and what happens to what you post.",
-};
+  path: "/terms",
+});
 
 /** Draft copy until approved (config/legal.ts). */
 export default async function TermsPage() {

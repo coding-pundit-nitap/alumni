@@ -3,10 +3,16 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { safeNextPath } from "@/lib/route-access";
+import { publicPageMetadata } from "@/lib/seo";
 import { getActor } from "@/modules/auth";
 import { AuthCard, LoginForm } from "@/modules/auth";
 
-export const metadata: Metadata = { title: "Sign in" };
+export const metadata: Metadata = publicPageMetadata({
+  title: "Sign in",
+  description:
+    "Sign in to the NIT Arunachal Pradesh Alumni Network to reach batchmates, mentors, jobs and events.",
+  path: "/login",
+});
 
 export default async function LoginPage({
   searchParams,

@@ -9,10 +9,14 @@ import {
   getOwnVerification,
   listVerificationOptions,
 } from "@/modules/auth";
+import { NO_INDEX } from "@/lib/seo";
 
 import { submitVerificationAction } from "./actions";
 
-export const metadata: Metadata = { title: "Verify your affiliation" };
+export const metadata: Metadata = {
+  title: "Verify your affiliation",
+  robots: NO_INDEX,
+};
 
 export default async function OnboardingPage() {
   const actor = await getActor();

@@ -4,13 +4,15 @@ import Link from "next/link";
 import { LegalPage, LegalSection } from "@/components/common/legal-page";
 import { PublicShell } from "@/components/common/public-shell";
 import { legalConfig } from "@/config/legal";
+import { publicPageMetadata } from "@/lib/seo";
 import { getActor } from "@/modules/auth";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = publicPageMetadata({
   title: "Contact",
   description:
     "How to reach the NIT Arunachal Pradesh alumni office, and where to go for account, content and privacy questions.",
-};
+  path: "/contact",
+});
 
 /** Contact details come from config/legal.ts. */
 export default async function ContactPage() {

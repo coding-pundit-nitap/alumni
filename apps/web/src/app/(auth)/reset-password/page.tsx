@@ -2,8 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { AuthCard, ResetPasswordForm } from "@/modules/auth";
+import { NO_INDEX } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Choose a new password" };
+export const metadata: Metadata = {
+  title: "Choose a new password",
+  robots: NO_INDEX,
+};
 
 const first = (value: string | string[] | undefined) =>
   Array.isArray(value) ? value[0] : value;

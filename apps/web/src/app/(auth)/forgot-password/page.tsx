@@ -2,8 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { AuthCard, ForgotPasswordForm } from "@/modules/auth";
+import { NO_INDEX } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Forgot your password" };
+export const metadata: Metadata = {
+  title: "Forgot your password",
+  robots: NO_INDEX,
+};
 
 export default function ForgotPasswordPage() {
   return (

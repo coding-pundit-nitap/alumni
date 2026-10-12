@@ -3,8 +3,12 @@ import Link from "next/link";
 import { z } from "zod";
 
 import { AuthCard, ResendVerification } from "@/modules/auth";
+import { NO_INDEX } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Check your email" };
+export const metadata: Metadata = {
+  title: "Check your email",
+  robots: NO_INDEX,
+};
 
 export default async function CheckEmailPage({
   searchParams,

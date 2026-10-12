@@ -27,7 +27,10 @@ const mono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 export const metadata: Metadata = {
   title: { default: siteConfig.name, template: `%s | ${siteConfig.name}` },
   description: siteConfig.description,
+  applicationName: siteConfig.name,
   metadataBase: new URL(siteConfig.url),
+  openGraph: { siteName: siteConfig.name, locale: "en_IN", type: "website" },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {

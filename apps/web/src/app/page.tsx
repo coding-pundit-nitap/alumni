@@ -5,6 +5,7 @@ import { EyeOff, ShieldCheck, SlidersHorizontal } from "lucide-react";
 import { PublicShell } from "@/components/common/public-shell";
 import { siteConfig } from "@/config/site";
 import { getActor } from "@/modules/auth";
+import { publicPageMetadata } from "@/lib/seo";
 import { verifiedHome } from "@/lib/signed-in-redirect";
 
 import { CtaButtons } from "./_landing/cta-buttons";
@@ -12,15 +13,11 @@ import { DawnScene } from "./_landing/dawn-scene";
 import { Features } from "./_landing/features";
 import { SunStage } from "./_landing/sun-stage";
 
-export const metadata: Metadata = {
-  title: { absolute: siteConfig.name },
+export const metadata: Metadata = publicPageMetadata({
+  title: siteConfig.name,
   description: siteConfig.description,
-  openGraph: {
-    title: siteConfig.name,
-    description: siteConfig.description,
-    type: "website",
-  },
-};
+  path: "/",
+});
 
 const EYEBROW =
   "font-mono text-xs tracking-[0.14em] uppercase sm:tracking-[0.2em]";
@@ -54,6 +51,21 @@ const TRUST = [
  * Anyone may view; VERIFIED visitors go to the app, other signed-in states see
  * "Go to dashboard".
  */
+// `<` escaped so no string here can close the script element.
+const ORGANIZATION_JSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  alternateName: siteConfig.shortName,
+  url: siteConfig.url,
+  logo: new URL("/icon-512.png", siteConfig.url).toString(),
+  description: siteConfig.description,
+  parentOrganization: {
+    "@type": "CollegeOrUniversity",
+    name: "National Institute of Technology Arunachal Pradesh",
+  },
+}).replace(/</g, "\\u003c");
+
 export default async function LandingPage() {
   const actor = await getActor();
   const home = verifiedHome(actor);
@@ -61,6 +73,11 @@ export default async function LandingPage() {
   const signedIn = actor !== null;
   return (
     <PublicShell signedIn={signedIn}>
+      {/* nosemgrep: nitap-dangerously-set-inner-html — constant JSON-LD from site config; a data block, so CSP does not run it. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: ORGANIZATION_JSON_LD }}
+      />
       <section className="dark bg-background text-foreground relative isolate overflow-hidden">
         <DawnScene />
         <div className="mx-auto flex max-w-4xl flex-col items-center px-4 pt-16 pb-[clamp(11rem,20vw,23rem)] text-center sm:px-8 lg:pt-20">

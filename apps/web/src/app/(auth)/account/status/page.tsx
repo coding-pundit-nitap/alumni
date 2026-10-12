@@ -9,8 +9,12 @@ import {
   accountStatusCopy,
   getActor,
 } from "@/modules/auth";
+import { NO_INDEX } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Account status" };
+export const metadata: Metadata = {
+  title: "Account status",
+  robots: NO_INDEX,
+};
 
 export default async function AccountStatusPage() {
   const actor = await getActor();

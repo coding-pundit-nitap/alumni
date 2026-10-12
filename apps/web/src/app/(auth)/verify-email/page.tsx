@@ -3,8 +3,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { AuthCard, ResendVerification } from "@/modules/auth";
+import { NO_INDEX } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Confirm your email" };
+export const metadata: Metadata = {
+  title: "Confirm your email",
+  robots: NO_INDEX,
+};
 
 const first = (value: string | string[] | undefined) =>
   Array.isArray(value) ? value[0] : value;

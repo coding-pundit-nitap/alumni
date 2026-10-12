@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { AdminRail } from "@/components/admin/admin-rail";
 import { adminNavigation, groupAdminNav } from "@/modules/admin";
 import { can, getActor } from "@/modules/auth";
+import { NO_INDEX } from "@/lib/seo";
+
+export const metadata: Metadata = { robots: NO_INDEX };
 
 /**
  * Not a security boundary: every page authorizes through its own use case. This

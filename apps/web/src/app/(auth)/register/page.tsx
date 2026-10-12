@@ -4,9 +4,15 @@ import { redirect } from "next/navigation";
 
 import { getActor } from "@/modules/auth";
 import { AuthCard, RegisterForm } from "@/modules/auth";
+import { publicPageMetadata } from "@/lib/seo";
 import { verifiedHome } from "@/lib/signed-in-redirect";
 
-export const metadata: Metadata = { title: "Create your account" };
+export const metadata: Metadata = publicPageMetadata({
+  title: "Create your account",
+  description:
+    "Join the NIT Arunachal Pradesh Alumni Network. Register with your email; the institute verifies every member.",
+  path: "/register",
+});
 
 export default async function RegisterPage() {
   const actor = await getActor();
