@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { PERMISSIONS } from "./permissions";
+import { PERMISSIONS, type Permission } from "./permissions";
 import {
   ROLE_NAMES,
   ROLE_PERMISSIONS,
@@ -36,7 +36,7 @@ describe("permission registry and RBAC matrix", () => {
 
   it("SUPER_ADMIN holds every permission except the alumni/student-specific member actions", () => {
     const superAdmin = new Set(ROLE_PERMISSIONS.SUPER_ADMIN);
-    const memberSpecific = new Set([
+    const memberSpecific = new Set<Permission>([
       PERMISSIONS.MENTOR_OPT_IN,
       PERMISSIONS.MENTORSHIP_REQUEST,
       PERMISSIONS.MENTORSHIP_RESPOND,
