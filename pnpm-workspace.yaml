@@ -14,19 +14,29 @@ allowBuilds:
 
 overrides:
   "@modelcontextprotocol/sdk@<1.31.0": ^1.31.0
+  body-parser@>=2.0.0 <2.4.0: ^2.4.0
   deepmerge-ts@<8.0.0: ^8.0.0
+  # vitest resolves happy-dom as an optional peer in every workspace; one version keeps a single vitest instance.
+  happy-dom@<21.0.4: ^21.0.4
   mysql2@<=3.23.0: ^3.23.1
   # solid-js (react-query devtools) pins ~1.5; the plugins move in lockstep with seroval.
   seroval@<1.6.3: ^1.6.3
   seroval-plugins@<1.6.3: ^1.6.3
   sharp@<0.35.5: ^0.35.5
   source-map-js@<1.2.2: ^1.2.2
+  undici@>=7.18.0 <7.30.1: ^7.30.1
+  undici@>=8.0.0 <8.12.2: ^8.12.2
+  vite@>=8.3.0 <8.3.3: ^8.3.3
+  zod@>=4.0.0 <4.6.6: ^4.6.6
 
 auditConfig:
   ignoreGhsas:
     # braces <=3.0.3, no patched release. Reached only through shadcn's CLI (fast-glob > micromatch); the app
     # imports nothing from shadcn but its stylesheet, so the vulnerable glob expansion never runs. 2026-10-07.
     - GHSA-vfj7-8cjw-p6xm
+    # zod <4.6.6, no patched 3.x. Only shadcn's CLI pins zod 3 (zod-to-json-schema, MCP SDK); it never validates
+    # untrusted input in the app, which runs on zod 4 (overridden above). 2026-10-26.
+    - GHSA-mrhx-c7xc-m3w5
 
 # dependency-cruiser only supports TypeScript < 7 and otherwise resolves the workspace's TS 7 through pnpm's
 # hoisting, silently cruising 0 modules. Give it its own compiler; drop this once it supports TS 7.
