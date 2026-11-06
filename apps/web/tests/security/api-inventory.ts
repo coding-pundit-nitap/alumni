@@ -60,6 +60,7 @@ export const API_INVENTORY: Record<string, Partial<Record<Method, Entry>>> = {
     POST: write({ kind: "better-auth" }),
   },
   "/api/photos/[userId]": { GET: read({ kind: "visibility" }) },
+  "/api/coordinators/[id]/photo": { GET: read({ kind: "public" }) },
   "/api/uploads/[id]": { GET: read(session(P.POST_INTERACT)) },
 
   "/api/v1/admin/audit-log": { GET: read(session(P.AUDIT_READ)) },

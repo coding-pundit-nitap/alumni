@@ -6,6 +6,7 @@ import {
   CalendarDays,
   ChartColumn,
   CircleAlert,
+  Contact,
   Flag,
   GraduationCap,
   HandCoins,
@@ -49,6 +50,7 @@ const ICONS: Record<NavIconName, LucideIcon> = {
   donations: HandCoins,
   donate: Heart,
   announcements: Megaphone,
+  coordinators: Contact,
 };
 
 export function NavIcon({

@@ -8,6 +8,7 @@ import {
   Award,
   Briefcase,
   ChartColumn,
+  Contact,
   Flag,
   HandCoins,
   HandHeart,
@@ -50,6 +51,7 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   achievements: Award,
   notifications: MailWarning,
   announcements: Megaphone,
+  coordinators: Contact,
 };
 
 const isActive = (pathname: string, href: string) =>

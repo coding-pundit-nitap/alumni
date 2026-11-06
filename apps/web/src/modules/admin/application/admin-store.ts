@@ -8,6 +8,11 @@ import type {
   MembersRaw,
 } from "../domain/analytics";
 import type { AuditCursor } from "../domain/audit-query";
+import type {
+  ContactCoordinator,
+  CoordinatorKind,
+  CoordinatorValues,
+} from "../domain/contact-coordinator";
 import type { KeysetCursor } from "../domain/keyset-cursor";
 
 export type MembersSummary = {
@@ -133,4 +138,34 @@ export type SettingsTx = {
 export type SettingsStore = {
   listRetention(): Promise<RetentionRow[]>;
   transaction<T>(fn: (tx: SettingsTx) => Promise<T>): Promise<T>;
+};
+
+/**
+ * Contact coordinator writes, each with its `config.changed` audit row in the
+ * same transaction.
+ */
+export type CoordinatorTx = {
+  findForUpdate(id: string): Promise<ContactCoordinator | null>;
+  isReadyUpload(id: string, ownerId: string): Promise<boolean>;
+  create(
+    values: CoordinatorValues,
+    actorId: string
+  ): Promise<ContactCoordinator>;
+  update(id: string, values: CoordinatorValues, actorId: string): Promise<void>;
+  remove(id: string): Promise<void>;
+  audit(entry: {
+    actorId: string;
+    targetId: string;
+    /** What happened and to which list; names and contact details stay out. */
+    metadata: {
+      change: "added" | "updated" | "removed";
+      kind: CoordinatorKind;
+    };
+  }): Promise<void>;
+};
+export type CoordinatorStore = {
+  list(): Promise<ContactCoordinator[]>;
+  /** The scanned photo's storage key; null without one. */
+  photoKey(id: string): Promise<string | null>;
+  transaction<T>(fn: (tx: CoordinatorTx) => Promise<T>): Promise<T>;
 };

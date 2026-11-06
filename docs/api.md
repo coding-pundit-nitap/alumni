@@ -83,6 +83,7 @@ Outside `/api/v1`:
 | `/api/auth/*`                                      | Better Auth: sign-up, sign-in, sign-out, email verification, password reset |
 | `GET /api/photos/:userId`                          | Profile photo: checks visibility, redirects to a short-lived presigned URL  |
 | `GET /api/uploads/:id`                             | Post image, same pattern                                                    |
+| `GET /api/coordinators/:id/photo`                  | Coordinator photo for the public contact page, same pattern                 |
 | `/storage/*`                                       | Same-origin proxy to object storage when `S3_PUBLIC_PATH=/storage`          |
 | `/health/live`, `/health/ready`, `/health/startup` | Probes                                                                      |
 | `POST /health/drain`                               | Take the instance out of rotation before stopping it                        |

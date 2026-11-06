@@ -32,7 +32,8 @@ export type NavIcon =
   | "jobs"
   | "achievements"
   | "notifications"
-  | "announcements";
+  | "announcements"
+  | "coordinators";
 export type NavItem = { href: string; label: string; icon: NavIcon };
 
 const QUEUE_ITEMS: ReadonlyArray<NavItem & { permission: Permission }> = [
@@ -89,6 +90,12 @@ const QUEUE_ITEMS: ReadonlyArray<NavItem & { permission: Permission }> = [
     label: "Announcements",
     icon: "announcements",
     permission: PERMISSIONS.ANNOUNCEMENT_PUBLISH,
+  },
+  {
+    href: "/admin/coordinators",
+    label: "Coordinators",
+    icon: "coordinators",
+    permission: PERMISSIONS.SYSTEM_CONFIGURE,
   },
   {
     href: "/admin/campaigns",
@@ -159,6 +166,7 @@ const GROUP_OF: Record<string, NavGroup["label"]> = {
   "/admin/jobs": "Queues",
   "/admin/achievements": "Queues",
   "/admin/announcements": "Content",
+  "/admin/coordinators": "Content",
   "/admin/campaigns": "Fundraising",
   "/admin/donations": "Fundraising",
   "/admin/users": "People",

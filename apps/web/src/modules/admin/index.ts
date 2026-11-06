@@ -21,6 +21,26 @@ export type {
   RetentionSettingView,
 } from "./domain/retention";
 export { RetentionTable } from "./presentation/ui/retention-table";
+export {
+  createAddContactCoordinator,
+  createGetCoordinatorPhotoKey,
+  createListContactCoordinators,
+  createRemoveContactCoordinator,
+  createUpdateContactCoordinator,
+} from "./application/contact-coordinators";
+export type { ListContactCoordinators } from "./application/contact-coordinators";
+export type { CoordinatorStore } from "./application/admin-store";
+export {
+  COORDINATOR_GROUPS,
+  coordinatorPhotoUrl,
+  telHref,
+} from "./domain/contact-coordinator";
+export type {
+  ContactCoordinator,
+  CoordinatorKind,
+} from "./domain/contact-coordinator";
+export { CoordinatorDialog } from "./presentation/ui/coordinator-dialog";
+export { CoordinatorTable } from "./presentation/ui/coordinator-table";
 export type { GetAnalytics } from "./application/get-analytics";
 export type { AnalyticsStore } from "./application/admin-store";
 export { ANALYTICS_RANGES, RANGE_DAYS } from "./domain/analytics";

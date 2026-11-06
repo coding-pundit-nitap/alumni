@@ -74,6 +74,7 @@ model User {
   notificationPreferences NotificationPreference[]
 
   retentionSettingsUpdated RetentionSetting[]
+  coordinatorsUpdated      ContactCoordinator[]
 
   campaignsCreated DonationCampaign[] @relation("CampaignCreator")
   donations        Donation[]         @relation("DonationDonor")
@@ -331,7 +332,8 @@ model Upload {
   createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
 
-  profile Profile?
+  profile      Profile?
+  coordinators ContactCoordinator[]
 
   @@index([ownerId, status])
   @@map("upload")
@@ -895,7 +897,9 @@ enum NotificationCategory {
   ENGAGEMENT
 }
 
-/** The grouping the preferences UI toggles; see domainFor(). */
+/**
+ * The grouping the preferences UI toggles; see domainFor().
+ */
 enum NotificationDomain {
   CONNECTION
   MENTORSHIP
@@ -983,6 +987,30 @@ model RetentionSetting {
   updater       User?    @relation(fields: [updatedBy], references: [id], onDelete: SetNull)
 
   @@map("retention_setting")
+}
+
+enum CoordinatorKind {
+  FACULTY_COORDINATOR
+  STUDENT_COORDINATOR
+}
+
+/// Published on the public contact page. Not accounts: these people need not be members.
+model ContactCoordinator {
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  kind          CoordinatorKind
+  name          String
+  designation   String?
+  email         String?
+  phone         String?
+  photoUploadId String?         @map("photo_upload_id") @db.Uuid
+  photo         Upload?         @relation(fields: [photoUploadId], references: [id], onDelete: SetNull)
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime        @default(now()) @map("updated_at") @db.Timestamptz(3)
+  updatedBy     String?         @map("updated_by") @db.Uuid
+  updater       User?           @relation(fields: [updatedBy], references: [id], onDelete: SetNull)
+
+  @@index([kind, createdAt])
+  @@map("contact_coordinator")
 }
 
 /// Offline fundraising. The app records pledges; money moves outside it.

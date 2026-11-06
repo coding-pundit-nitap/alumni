@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@nitap/ui/components/button";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import type { ActionResult } from "@/lib/action-result";
 
@@ -43,21 +43,29 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 /**
  * Not a `<form>`: the file goes straight to the store, then this polls while
  * the worker scans it. `setProfilePhotoAction` refreshes the page itself.
+ * Inside a larger form, pass `onReady` instead of `setPhotoAction`: the form
+ * then saves the scanned upload along with its other fields.
  */
 export function PhotoUpload({
   photoUrl,
+  photoAlt = "Profile photo",
   presignAction,
   completeAction,
   statusAction,
   setPhotoAction,
+  onReady,
+  onBusyChange,
   pollIntervalMs = POLL_INTERVAL_MS,
   pollMaxAttempts = POLL_MAX_ATTEMPTS,
 }: {
   photoUrl: string | null;
+  photoAlt?: string;
   presignAction: PresignAction;
   completeAction: CompleteAction;
   statusAction: StatusAction;
-  setPhotoAction: SetPhotoAction;
+  setPhotoAction?: SetPhotoAction;
+  onReady?: (uploadId: string) => void;
+  onBusyChange?: (busy: boolean) => void;
   /** Overridable so tests don't wait on the real 2s cadence. */
   pollIntervalMs?: number;
   pollMaxAttempts?: number;
@@ -66,6 +74,14 @@ export function PhotoUpload({
   const inputRef = useRef<HTMLInputElement>(null);
   const [state, setState] = useState<State>({ phase: "idle" });
   const [settingPhoto, setSettingPhoto] = useState(false);
+
+  const busy = state.phase === "working";
+  useEffect(() => onBusyChange?.(busy), [busy, onBusyChange]);
+
+  function markReady(uploadId: string) {
+    setState({ phase: "ready", uploadId });
+    onReady?.(uploadId);
+  }
 
   async function pollUntilResolved(uploadId: string) {
     for (let attempt = 0; attempt < pollMaxAttempts; attempt += 1) {
@@ -76,7 +92,7 @@ export function PhotoUpload({
         return;
       }
       if (result.data.status === "READY") {
-        setState({ phase: "ready", uploadId });
+        markReady(uploadId);
         return;
       }
       if (result.data.status === "REJECTED") {
@@ -124,7 +140,7 @@ export function PhotoUpload({
       return;
     }
     if (completed.data.status === "READY") {
-      setState({ phase: "ready", uploadId });
+      markReady(uploadId);
       return;
     }
     if (completed.data.status === "REJECTED") {
@@ -135,7 +151,7 @@ export function PhotoUpload({
   }
 
   async function onSetPhoto() {
-    if (state.phase !== "ready") return;
+    if (state.phase !== "ready" || !setPhotoAction) return;
     setSettingPhoto(true);
     const result = await setPhotoAction(state.uploadId);
     setSettingPhoto(false);
@@ -148,7 +164,7 @@ export function PhotoUpload({
         // eslint-disable-next-line @next/next/no-img-element -- a presigned, auth-checked route; not a static asset.
         <img
           src={photoUrl}
-          alt="Profile photo"
+          alt={photoAlt}
           className="ring-border bg-muted size-20 rounded-full object-cover ring-1"
         />
       ) : (
@@ -184,7 +200,12 @@ export function PhotoUpload({
             {state.message}
           </p>
         ) : null}
-        {state.phase === "ready" ? (
+        {state.phase === "ready" && onReady ? (
+          <p role="status" className="text-muted-foreground text-sm">
+            Photo ready. Save to publish it.
+          </p>
+        ) : null}
+        {state.phase === "ready" && setPhotoAction ? (
           <Button
             type="button"
             variant="brand"

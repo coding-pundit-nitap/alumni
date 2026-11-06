@@ -33,7 +33,8 @@ export type NavIconName =
   | "campaigns"
   | "donations"
   | "donate"
-  | "announcements";
+  | "announcements"
+  | "coordinators";
 
 export type NavEntry = { href: string; label: string; icon: NavIconName };
 export type NavGroup = { label: string | null; entries: NavEntry[] };
@@ -65,6 +66,7 @@ const ADMIN_ICON_MAP: Record<NavIcon, NavIconName> = {
   achievements: "achievements",
   notifications: "notifications",
   announcements: "announcements",
+  coordinators: "coordinators",
 };
 
 function soloGroup(entry: NavEntry): NavModel {

@@ -8,23 +8,29 @@ import {
   SUPER_ADMIN_ROLE,
 } from "@/infrastructure/role-permissions";
 import {
+  createAddContactCoordinator,
   createAssignRole,
   createChangeAccountState,
   createGetAnalytics,
+  createGetCoordinatorPhotoKey,
   createGetDashboard,
   createGetUser,
   createGrantPermission,
   createListAuditLog,
+  createListContactCoordinators,
   createListRetentionSettings,
   createListUsers,
+  createRemoveContactCoordinator,
   createRevokeGrant,
   createRevokeRole,
+  createUpdateContactCoordinator,
   createUpdateRetentionSetting,
 } from "@/modules/admin";
 import {
   createPrismaAccessStore,
   createPrismaAdminStore,
   createPrismaAnalyticsStore,
+  createPrismaCoordinatorStore,
   createPrismaSettingsStore,
 } from "@/modules/admin/server";
 import { authorize, can, loadGrants } from "@/modules/auth";
@@ -101,3 +107,21 @@ const settings = {
 };
 export const listRetentionSettings = createListRetentionSettings(settings);
 export const updateRetentionSetting = createUpdateRetentionSetting(settings);
+
+const coordinators = {
+  store: createPrismaCoordinatorStore({
+    db: prisma,
+    runner: transactionRunner,
+    audit,
+  }),
+  authorize,
+};
+export const listContactCoordinators =
+  createListContactCoordinators(coordinators);
+export const getCoordinatorPhotoKey =
+  createGetCoordinatorPhotoKey(coordinators);
+export const addContactCoordinator = createAddContactCoordinator(coordinators);
+export const updateContactCoordinator =
+  createUpdateContactCoordinator(coordinators);
+export const removeContactCoordinator =
+  createRemoveContactCoordinator(coordinators);

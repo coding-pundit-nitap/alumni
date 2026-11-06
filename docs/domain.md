@@ -22,7 +22,7 @@ Conventions: UUID ids, `snake_case` columns, `timestamptz` in UTC, money in inte
 | moderation    | `report`                                                                                                      |
 | notifications | `notification`, `notification_delivery`, `notification_preference`, `email_suppression`                       |
 | donations     | `donation_campaign`, `donation`                                                                               |
-| platform      | `outbox_event`, `audit_log`, `idempotency_key`, `retention_setting`                                           |
+| platform      | `outbox_event`, `audit_log`, `idempotency_key`, `retention_setting`, `contact_coordinator`                    |
 
 ## State machines
 
