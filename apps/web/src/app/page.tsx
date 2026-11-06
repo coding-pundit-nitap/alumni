@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { EyeOff, ShieldCheck, SlidersHorizontal } from "lucide-react";
 
-import { Crest, Seal } from "@/components/brand/crest";
-import { Ridgelines } from "@/components/brand/ridgelines";
 import { PublicShell } from "@/components/common/public-shell";
 import { siteConfig } from "@/config/site";
 import { getActor } from "@/modules/auth";
@@ -20,32 +19,16 @@ export const metadata: Metadata = publicPageMetadata({
   path: "/",
 });
 
-const EYEBROW = "text-brand text-sm font-semibold";
+const STATEMENT =
+  "You came to Jote for a degree and left with a batch. Alumni, students, faculty and staff, back in one place, with every account checked by the institute.".split(
+    " "
+  );
 
 const FACTS = [
   { term: "Established", detail: "2010" },
   { term: "Status", detail: "Institute of National Importance" },
   { term: "Campus", detail: "Jote, Papum Pare" },
   { term: "Membership", detail: "Verified by the institute" },
-];
-
-const MEMBERS = [
-  {
-    who: "Alumni",
-    body: "Graduates of every programme and batch, wherever work has taken you.",
-  },
-  {
-    who: "Students",
-    body: "Currently enrolled students looking for mentors, internships and advice.",
-  },
-  {
-    who: "Faculty",
-    body: "Teachers who want to stay in touch with the students they taught.",
-  },
-  {
-    who: "Staff",
-    body: "Members of the institute who keep the campus running.",
-  },
 ];
 
 const STEPS = [
@@ -92,89 +75,87 @@ export default async function LandingPage() {
   if (home) redirect(home);
   const signedIn = actor !== null;
   return (
-    <PublicShell signedIn={signedIn}>
+    <PublicShell signedIn={signedIn} overPhoto>
       {/* nosemgrep: nitap-dangerously-set-inner-html — constant JSON-LD from site config; a data block, so CSP does not run it. */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: ORGANIZATION_JSON_LD }}
       />
 
-      <section className="relative isolate overflow-hidden">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 pt-14 pb-[clamp(9rem,16vw,15rem)] sm:px-8 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:pt-24">
-          <div>
-            <Crest className="rise-in mb-6 w-16 lg:hidden" />
-            <h1
-              className="font-display rise-in text-[clamp(2.5rem,5.2vw,4.25rem)] leading-[1.04] font-semibold tracking-[-0.02em] text-balance"
-              style={{ "--i": 1 } as React.CSSProperties}
-            >
-              Stay connected to the institute that shaped you.
-            </h1>
+      {/* Pulled up under the sticky header; the top strip keeps its 2.25rem. */}
+      <section className="relative isolate -mt-[4.25rem] flex min-h-[calc(100svh-2.25rem)] overflow-hidden bg-[oklch(0.17_0.025_262)]">
+        <div className="hero-photo absolute inset-0 -z-10 origin-[50%_55%]">
+          <Image
+            src="/images/campus-academic-blocks.png"
+            alt="The academic blocks of NIT Arunachal Pradesh under a wide blue sky, with forested hills behind them."
+            fill
+            preload
+            sizes="100vw"
+            className="object-cover object-top"
+          />
+        </div>
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-[oklch(0.3_0.08_255/0.5)] via-transparent via-40% to-transparent"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-[oklch(0.17_0.025_262/0.82)] to-transparent"
+        />
+        {/* Headline in the sky, action on the field: the buildings stay clear. */}
+        <div className="hero-copy mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-8 px-4 pt-[calc(4.25rem+clamp(1.5rem,5vh,3.5rem))] pb-[clamp(1.5rem,5vh,3rem)] text-center text-white sm:px-8">
+          <h1
+            className="font-display rise-in text-[clamp(2.75rem,min(5.6vw,11vh),5.75rem)] leading-[1.04] font-semibold tracking-[-0.025em] text-balance"
+            style={{ "--i": 1 } as React.CSSProperties}
+          >
+            Stay connected to the institute that shaped you.
+          </h1>
+          <div className="flex flex-col items-center">
             <p
-              className="text-muted-foreground rise-in mt-6 max-w-[46ch] text-lg leading-relaxed text-pretty"
+              className="rise-in max-w-[62ch] text-lg leading-relaxed text-pretty sm:text-xl"
               style={{ "--i": 2 } as React.CSSProperties}
             >
               One verified directory for the students, alumni, faculty and staff
               of NIT Arunachal Pradesh.
             </p>
             <div
-              className="rise-in mt-9"
+              className="rise-in mt-6"
               style={{ "--i": 3 } as React.CSSProperties}
             >
               <CtaButtons signedIn={signedIn} />
             </div>
           </div>
-          <div
-            className="rise-in hidden justify-center lg:flex"
-            style={{ "--i": 2 } as React.CSSProperties}
-          >
-            <Seal className="w-[clamp(16rem,26vw,22rem)]" />
-          </div>
         </div>
-        <Ridgelines className="absolute inset-x-0 bottom-0 -z-10 h-[clamp(8rem,17vw,16rem)]" />
       </section>
 
       <section
-        aria-label="About the institute"
-        className="border-border border-y"
+        aria-labelledby="who-can-join"
+        className="px-4 pt-32 pb-24 sm:px-8 lg:pt-48 lg:pb-32"
       >
-        <dl className="mx-auto grid max-w-7xl grid-cols-2 px-4 sm:px-8 lg:grid-cols-4">
-          {FACTS.map(({ term, detail }, i) => (
-            <div
-              key={term}
-              className={`border-border py-7 lg:py-9 ${i % 2 === 1 ? "border-l pl-5 sm:pl-8" : ""} ${i >= 2 ? "border-t lg:border-t-0" : ""} ${i === 2 ? "lg:border-l lg:pl-8" : ""}`}
-            >
-              <dt className="text-muted-foreground text-sm">{term}</dt>
-              <dd className="font-display mt-1.5 text-lg font-semibold tracking-tight text-balance sm:text-xl">
-                {detail}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      <section className="pt-24 lg:pt-32">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-8 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <h2 className="font-display text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl">
-              Who can join
-            </h2>
-            <p className="text-muted-foreground mt-5 max-w-[42ch] text-lg leading-relaxed text-pretty">
-              The network is open to anyone who studied or works at NIT
-              Arunachal Pradesh. The institute checks every account before it
-              can see the directory.
-            </p>
-          </div>
-          <dl className="divide-border border-border divide-y border-y lg:col-span-7 lg:col-start-6">
-            {MEMBERS.map(({ who, body }) => (
-              <div
-                key={who}
-                className="grid gap-1 py-6 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-8"
+        <div className="mx-auto max-w-5xl">
+          <h2 id="who-can-join" className="text-brand text-lg font-semibold">
+            Who can join
+          </h2>
+          <p className="word-reveal font-display mt-6 text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.1] font-semibold tracking-[-0.02em]">
+            {STATEMENT.map((word, i) => (
+              <span
+                key={i}
+                style={
+                  {
+                    "--p": i / (STATEMENT.length - 1),
+                  } as React.CSSProperties
+                }
               >
-                <dt className="font-display text-2xl font-semibold tracking-tight">
-                  {who}
-                </dt>
-                <dd className="text-muted-foreground leading-relaxed sm:pt-1.5">
-                  {body}
+                {word}{" "}
+              </span>
+            ))}
+          </p>
+          <dl className="mt-20 grid grid-cols-2 gap-x-8 gap-y-10 lg:mt-28 lg:grid-cols-4">
+            {FACTS.map(({ term, detail }) => (
+              <div key={term}>
+                <dt className="text-muted-foreground text-sm">{term}</dt>
+                <dd className="font-display mt-1.5 text-xl font-semibold tracking-tight text-balance">
+                  {detail}
                 </dd>
               </div>
             ))}
@@ -186,74 +167,83 @@ export default async function LandingPage() {
 
       <section
         id="how-it-works"
-        className="bg-muted/50 border-border scroll-mt-16 border-y py-24 lg:py-28"
+        className="scroll-mt-16 px-4 pt-32 pb-24 sm:px-8 lg:pt-44 lg:pb-32"
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-8">
-          <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="font-display text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.08] font-semibold tracking-[-0.02em]">
             How it works
           </h2>
-          <ol className="relative mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
-            <span
-              aria-hidden
-              className="bg-border absolute top-5 right-[16%] left-5 hidden h-px md:block"
-            />
-            {STEPS.map((step, i) => (
-              <li key={step.title} className="relative flex gap-5 md:flex-col">
-                <span className="bg-background border-primary text-primary font-display flex size-10 shrink-0 items-center justify-center rounded-full border text-lg font-semibold">
-                  {i + 1}
-                </span>
-                <div>
-                  <h3 className="font-display text-2xl font-semibold tracking-tight">
-                    {step.title}
-                  </h3>
-                  <p className="text-muted-foreground mt-1.5">{step.body}</p>
-                </div>
+          <ol className="mt-14 grid gap-10 md:grid-cols-3 md:gap-12">
+            {STEPS.map(({ title, body }) => (
+              <li key={title}>
+                <h3 className="font-display text-3xl font-semibold tracking-tight">
+                  {title}
+                </h3>
+                <p className="text-muted-foreground mt-2 text-lg leading-relaxed text-pretty">
+                  {body}
+                </p>
               </li>
             ))}
           </ol>
         </div>
       </section>
 
-      <section id="privacy" className="scroll-mt-16 py-24 lg:py-32">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8">
-          <h2 className={EYEBROW}>A trusted network</h2>
-          <p className="font-display mt-5 max-w-4xl text-3xl leading-[1.2] font-medium tracking-tight text-balance sm:text-4xl lg:text-[2.75rem]">
-            Every member is verified by the institute. You choose who sees your
-            profile, and your email, phone and roll number are{" "}
-            <em className="text-brand">never shown</em> to other members.
+      <section
+        id="privacy"
+        className="scroll-mt-16 px-4 pt-16 pb-32 sm:px-8 lg:pb-44"
+      >
+        <div className="mx-auto max-w-5xl">
+          <h2 className="font-display text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.1] font-semibold tracking-[-0.02em] text-balance">
+            Your email, phone and roll number are{" "}
+            <em className="text-brand pb-1">never shown</em> to other members.
+          </h2>
+          <p className="text-muted-foreground mt-6 max-w-[52ch] text-lg leading-relaxed text-pretty">
+            Every member is verified by the institute, and you choose who sees
+            your profile.
           </p>
-          <dl className="border-border mt-14 grid gap-px overflow-hidden rounded-lg border bg-[var(--border)] sm:grid-cols-3">
+          <dl className="mt-14 grid gap-8 sm:grid-cols-3">
             {TRUST.map(({ icon: Icon, term, detail }) => (
-              <div key={term} className="bg-background flex flex-col gap-4 p-6">
-                <Icon aria-hidden className="text-brand size-5" />
-                <div>
-                  <dt className="text-muted-foreground text-sm">{term}</dt>
-                  <dd className="mt-1 font-medium">{detail}</dd>
-                </div>
+              <div key={term}>
+                <Icon aria-hidden className="text-brand size-6" />
+                <dt className="text-muted-foreground mt-4 text-sm">{term}</dt>
+                <dd className="mt-1 text-lg font-medium">{detail}</dd>
               </div>
             ))}
           </dl>
         </div>
       </section>
 
-      <section className="bg-muted/50 border-border border-t">
-        <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-20 sm:px-8 lg:flex-row lg:items-end lg:justify-between lg:py-24">
-          <div>
-            <p className="font-display max-w-2xl text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl">
-              Your batch is already here.
-            </p>
-            <p className="text-muted-foreground mt-4">
-              Questions about membership?{" "}
-              <Link
-                href="/contact"
-                className="text-foreground focus-visible:ring-ring rounded-sm underline decoration-from-font underline-offset-4 hover:decoration-2 focus-visible:ring-2 focus-visible:outline-none"
-              >
-                Write to the alumni office
-              </Link>
-              .
-            </p>
+      <section className="relative isolate flex min-h-svh items-end justify-center overflow-hidden px-4 pt-24 pb-[clamp(2.5rem,8vh,5rem)] text-center text-white sm:px-8">
+        <div className="photo-open absolute inset-0 -z-10 bg-[oklch(0.17_0.025_262)]">
+          <Image
+            src="/images/campus-hillside-aerial.png"
+            alt="The campus from the air: the domed building and long blocks strung along one road through the forest."
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-gradient-to-t from-[oklch(0.17_0.025_262/0.92)] via-[oklch(0.17_0.025_262/0.55)] via-40% to-transparent to-75%"
+          />
+        </div>
+        <div className="flex flex-col items-center">
+          <p className="font-display text-[clamp(2.75rem,7vw,6.25rem)] leading-[1.04] font-semibold tracking-[-0.025em] text-balance">
+            Your batch is already here.
+          </p>
+          <div className="mt-9">
+            <CtaButtons signedIn={signedIn} />
           </div>
-          <CtaButtons signedIn={signedIn} />
+          <p className="mt-7 text-white/90">
+            Questions about membership?{" "}
+            <Link
+              href="/contact"
+              className="rounded-sm underline decoration-from-font underline-offset-4 hover:decoration-2 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+            >
+              Write to the alumni office
+            </Link>
+            .
+          </p>
         </div>
       </section>
     </PublicShell>

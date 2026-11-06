@@ -1,139 +1,150 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
-import { ArrowUpRight, Check } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-const CHIP =
-  "border-border text-muted-foreground rounded-sm border px-2 py-0.5 font-mono text-[11px]";
-
-type Feature = {
-  title: string;
-  body: string;
-  detail: ReactNode;
-  /** Columns out of six at lg. */
-  span: string;
-  tinted?: boolean;
-};
-
-const FEATURES: Feature[] = [
+const SCENES = [
   {
-    title: "Directory",
-    body: "Find batchmates by department, batch, company or city.",
-    span: "lg:col-span-4",
-    tinted: true,
-    detail: (
-      <div className="flex -space-x-2">
-        {["TL", "RD", "NB", "PK", "YT"].map((i) => (
-          <span
-            key={i}
-            className="bg-background border-border text-foreground flex size-9 items-center justify-center rounded-md border text-[11px] font-semibold"
-          >
-            {i}
-          </span>
-        ))}
-      </div>
-    ),
+    photo: "/images/campus-hostel-road.png",
+    alt: "A long hostel block on a forested hillside, with the campus road winding past it.",
+    headline: "You shared a hostel. Find them again.",
+    panelSide: "md:ml-auto",
+    items: [
+      {
+        title: "Directory",
+        body: "Find batchmates by department, batch, company or city.",
+      },
+      {
+        title: "Messages",
+        body: "Direct and group conversations with the people you know.",
+      },
+    ],
   },
   {
-    title: "Mentorship",
-    body: "Ask alumni who have walked the path before you.",
-    span: "lg:col-span-2",
-    detail: <span className={CHIP}>ECE 2016 to ECE 2027</span>,
+    photo: "/images/campus-dome-panorama.png",
+    alt: "The road climbing past the domed building towards the hostels, with forested hills behind.",
+    headline: "Someone already took this road.",
+    panelSide: "",
+    items: [
+      {
+        title: "Mentorship",
+        body: "Ask alumni who have walked the path before you.",
+      },
+      {
+        title: "Jobs & internships",
+        body: "Openings shared by alumni and reviewed before they go live.",
+      },
+    ],
   },
   {
-    title: "Jobs & internships",
-    body: "Openings shared by alumni and reviewed before they go live.",
-    span: "lg:col-span-2",
-    detail: (
-      <span className="text-success border-success/30 flex items-center gap-1 rounded-sm border px-2 py-0.5 font-mono text-[11px]">
-        <Check aria-hidden className="size-3" /> Reviewed
-      </span>
-    ),
-  },
-  {
-    title: "Events",
-    body: "Reunions, talks and meetups, on campus, online and in your city.",
-    span: "lg:col-span-4",
-    tinted: true,
-    detail: (
-      <span className="bg-background border-border flex flex-col items-center rounded-md border px-3 py-1.5 leading-none">
-        <span className="text-brand font-mono text-[10px] tracking-widest">
-          SAT
-        </span>
-        <span className="font-display mt-0.5 text-2xl font-semibold">14</span>
-      </span>
-    ),
-  },
-  {
-    title: "Messages",
-    body: "Direct and group conversations with the people you know.",
-    span: "lg:col-span-3",
-    detail: (
-      <span className="flex flex-col items-start gap-1">
-        <span className="bg-muted rounded-md rounded-bl-sm px-2.5 py-1 text-[11px]">
-          In Itanagar this weekend?
-        </span>
-        <span className="bg-primary text-primary-foreground self-end rounded-md rounded-br-sm px-2.5 py-1 text-[11px]">
-          Saturday works.
-        </span>
-      </span>
-    ),
-  },
-  {
-    title: "Achievements",
-    body: "Share milestones; the institute reviews them before they reach the feed.",
-    span: "lg:col-span-3",
-    detail: <span className={CHIP}>Institute-reviewed</span>,
+    photo: "/images/campus-dome-academic-aerial.png",
+    alt: "The domed building and an academic block seen from above, with forest rising behind them.",
+    headline: "There is always a reason to come back.",
+    panelSide: "md:ml-auto",
+    items: [
+      {
+        title: "Events",
+        body: "Reunions, talks and meetups, on campus, online and in your city.",
+      },
+      {
+        title: "Achievements",
+        body: "Share milestones; the institute reviews them before they reach the feed.",
+      },
+    ],
   },
 ];
 
 /**
- * What members can do, as a hairline grid of uneven tiles; every tile leads to
+ * What members can do, told over the campus: the photos stay pinned and
+ * crossfade as each panel crosses the middle of the screen. Every item leads to
  * sign-up (or the app when signed in).
  */
 export function Features({ signedIn }: { signedIn: boolean }) {
   const href = signedIn ? "/dashboard" : "/register";
-  return (
-    <section aria-label="What you can do" className="py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8">
-        <h2 className="font-display max-w-2xl text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-5xl">
-          Everything the network does for you
-        </h2>
-        <p className="text-muted-foreground mt-5 max-w-[60ch] text-lg text-pretty">
-          Verified once by the institute. After that, six ways back to the
-          people you studied and worked with.
-        </p>
+  const [active, setActive] = useState(0);
+  const sceneRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-        <ul className="border-border mt-14 grid border-t border-l sm:grid-cols-2 lg:grid-cols-6">
-          {FEATURES.map(({ title, body, detail, span, tinted }) => (
-            <li
-              key={title}
-              className={`border-border border-r border-b ${span}`}
-            >
-              <Link
-                href={href}
-                className={`group focus-visible:ring-ring flex h-full min-h-56 flex-col justify-between gap-10 p-6 transition-colors duration-200 hover:bg-muted/70 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset sm:p-8 ${tinted ? "bg-muted/40" : ""}`}
-              >
-                <div aria-hidden className="flex min-h-10 items-start">
-                  {detail}
-                </div>
-                <div>
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h3 className="font-display text-2xl font-semibold tracking-tight sm:text-[1.75rem]">
-                      {title}
-                    </h3>
-                    <ArrowUpRight
-                      aria-hidden
-                      className="text-muted-foreground group-hover:text-brand size-5 shrink-0 transition-[color,translate] duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    />
-                  </div>
-                  <p className="text-muted-foreground mt-2 max-w-[44ch] leading-relaxed">
-                    {body}
-                  </p>
-                </div>
-              </Link>
-            </li>
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          setActive(sceneRefs.current.indexOf(entry.target as HTMLDivElement));
+        }
+      },
+      { rootMargin: "-50% 0px -50% 0px" }
+    );
+    for (const scene of sceneRefs.current) {
+      if (scene) observer.observe(scene);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      aria-label="What you can do"
+      className="relative bg-[oklch(0.17_0.025_262)]"
+    >
+      <div className="sticky top-0 h-svh overflow-hidden">
+        <div className="absolute inset-0">
+          {SCENES.map(({ photo, alt }, i) => (
+            <Image
+              key={photo}
+              src={photo}
+              alt={alt}
+              fill
+              sizes="100vw"
+              aria-hidden={i !== active}
+              className={`story-photo object-cover ${i === active ? "is-active" : ""}`}
+            />
           ))}
-        </ul>
+        </div>
+      </div>
+
+      <div className="relative -mt-[100svh]">
+        {SCENES.map(({ photo, headline, panelSide, items }, i) => (
+          <div
+            key={photo}
+            ref={(el) => {
+              sceneRefs.current[i] = el;
+            }}
+            className="flex min-h-[125svh] items-end px-4 pb-6 sm:px-8 md:items-center md:pb-0"
+          >
+            <div className="mx-auto w-full max-w-7xl">
+              <div
+                className={`glass-panel w-full max-w-[30rem] rounded-3xl p-6 text-white sm:p-8 ${panelSide}`}
+              >
+                <h2 className="font-display text-[clamp(2rem,3.4vw,2.875rem)] leading-[1.08] font-semibold tracking-[-0.02em] text-balance">
+                  {headline}
+                </h2>
+                <ul className="mt-6 space-y-1">
+                  {items.map(({ title, body }) => (
+                    <li key={title}>
+                      <Link
+                        href={href}
+                        className="group -mx-3 block rounded-2xl px-3 py-3 transition-[background-color,scale] duration-150 ease-out hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none active:scale-[0.98]"
+                      >
+                        <div className="flex items-center justify-between gap-4">
+                          <h3 className="text-lg font-semibold">{title}</h3>
+                          <ArrowUpRight
+                            aria-hidden
+                            className="size-5 shrink-0 text-white/70 transition-[color,translate] duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white"
+                          />
+                        </div>
+                        <p className="mt-1 leading-relaxed text-white/85">
+                          {body}
+                        </p>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

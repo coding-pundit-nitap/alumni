@@ -42,9 +42,12 @@ const ACCOUNT = [
 export function PublicShell({
   signedIn,
   children,
+  overPhoto = false,
 }: {
   signedIn: boolean;
   children: ReactNode;
+  /** The page opens on a full-bleed photo that runs under the header. */
+  overPhoto?: boolean;
 }) {
   return (
     <div className="flex min-h-svh flex-col">
@@ -74,7 +77,9 @@ export function PublicShell({
           </a>
         </div>
       </div>
-      <header className="bg-background/80 border-border/60 sticky top-0 z-50 w-full border-b backdrop-blur">
+      <header
+        className={`sticky top-0 z-50 w-full ${overPhoto ? "glass-chrome" : "bg-background/80 border-border/60 border-b backdrop-blur"}`}
+      >
         <div className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-8">
           <Link
             href="/"

@@ -196,6 +196,85 @@
   }
 }
 
+/* Landing materials: translucent layers over the campus photographs. */
+.glass-chrome {
+  background: color-mix(in oklch, var(--background) 62%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+
+.glass-panel {
+  background: oklch(0.17 0.025 262 / 0.62);
+  backdrop-filter: blur(28px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 24px 60px oklch(0.17 0.025 262 / 0.35);
+}
+
+.glass-pill {
+  background: rgb(255 255 255 / 0.16);
+  backdrop-filter: blur(16px) saturate(170%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4);
+  &:hover {
+    background: rgb(255 255 255 / 0.26);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-chrome {
+    background: var(--background);
+    backdrop-filter: none;
+  }
+  .glass-panel {
+    background: oklch(0.17 0.025 262);
+    backdrop-filter: none;
+  }
+  .glass-pill {
+    background: oklch(0.17 0.025 262);
+    backdrop-filter: none;
+  }
+}
+
+/* Crossfades start from the on-screen value, so scrolling back mid-fade never jumps. */
+.story-photo {
+  opacity: 0;
+  scale: 1.05;
+  transition:
+    opacity 700ms ease-out,
+    scale 1400ms var(--ease-out-strong);
+  &.is-active {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes hero-recede {
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes hero-copy-lift {
+  to {
+    opacity: 0;
+    transform: translateY(-3rem);
+  }
+}
+
+@keyframes word-light {
+  from {
+    opacity: 0.2;
+  }
+}
+
+@keyframes photo-open {
+  from {
+    clip-path: inset(9% 7% round 1.5rem);
+  }
+  to {
+    clip-path: inset(0 round 0);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .rise-in {
     animation: rise-in 700ms var(--ease-out-strong) both;
@@ -206,6 +285,31 @@
       animation: drift linear both;
       animation-timeline: scroll(root);
       animation-range: 0 100vh;
+    }
+    .hero-photo {
+      animation: hero-recede linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+    }
+    .hero-copy {
+      animation: hero-copy-lift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 60vh;
+    }
+    .word-reveal {
+      view-timeline-name: --word-reveal;
+    }
+    /* --p is the word's position in the sentence, from 0 to 1. */
+    .word-reveal > span {
+      animation: word-light linear both;
+      animation-timeline: --word-reveal;
+      animation-range: cover calc(16% + var(--p) * 36%) cover
+        calc(22% + var(--p) * 36%);
+    }
+    .photo-open {
+      animation: photo-open linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 45%;
     }
   }
 }
