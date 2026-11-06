@@ -27,6 +27,7 @@ const ABOUT = [
   { label: "Privacy", href: "/#privacy" },
   { label: "Terms", href: "/terms" },
   { label: "Contact", href: "/contact" },
+  { label: "Developer", href: "/developer" },
 ];
 
 const ACCOUNT = [
@@ -164,7 +165,9 @@ export function PublicShell({
           <div className="text-muted-foreground mx-auto flex max-w-7xl flex-col gap-1 px-4 py-5 text-xs sm:flex-row sm:justify-between sm:px-8">
             {/* oxlint-disable-next-line react/purity -- server component */}
             <p>&copy; {new Date().getFullYear()} NIT Arunachal Pradesh</p>
-            <p>Made by the NIT AP Coding Club</p>
+            <Link href="/developer" className={FOOTER_LINK}>
+              Made by the NIT AP Coding Club
+            </Link>
           </div>
         </div>
       </footer>

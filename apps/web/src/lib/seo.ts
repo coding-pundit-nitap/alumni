@@ -9,6 +9,7 @@ export const INDEXABLE_PATHS = [
   "/login",
   "/terms",
   "/contact",
+  "/developer",
 ] as const;
 
 type IndexablePath = (typeof INDEXABLE_PATHS)[number];

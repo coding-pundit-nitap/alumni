@@ -93,6 +93,23 @@ describe("PublicShell", () => {
     }
   });
 
+  it("links the developer page from the footer, signed in or not", () => {
+    for (const signedIn of [false, true]) {
+      const { unmount } = render(
+        <PublicShell signedIn={signedIn}>x</PublicShell>
+      );
+      const footer = within(screen.getByRole("contentinfo"));
+      expect(footer.getByRole("link", { name: "Developer" })).toHaveAttribute(
+        "href",
+        "/developer"
+      );
+      expect(
+        footer.getByRole("link", { name: "Made by the NIT AP Coding Club" })
+      ).toHaveAttribute("href", "/developer");
+      unmount();
+    }
+  });
+
   it("lists account links in the footer when signed out", () => {
     render(<PublicShell signedIn={false}>body</PublicShell>);
     const account = within(screen.getByRole("navigation", { name: "Account" }));

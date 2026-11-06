@@ -16,6 +16,7 @@ const PUBLIC_PREFIXES = [
   // Supporting pages; the footer links them for everyone.
   "/terms",
   "/contact",
+  "/developer",
   // Guests may view a PUBLIC profile; the page itself answers 404 for anything else.
   "/members",
   // Social crawlers fetch this with no session cookie when a link is shared.
