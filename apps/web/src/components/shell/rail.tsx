@@ -1,6 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { CampusImage } from "@/components/brand/campus-image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
@@ -11,8 +12,8 @@ import {
   TooltipTrigger,
 } from "@nitap/ui/components/tooltip";
 
+import { CAMPUS_PHOTOS } from "@/components/brand/campus-photos";
 import { Crest, Wordmark } from "@/components/brand/crest";
-import { Ridgelines } from "@/components/brand/ridgelines";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -45,7 +46,7 @@ export function Rail({
   );
 
   return (
-    <aside className="sticky top-0 hidden h-svh shrink-0 flex-col border-r md:flex md:w-[72px] lg:w-[248px] min-[1240px]:border-l">
+    <aside className="glass-chrome sticky top-0 hidden h-svh shrink-0 flex-col md:flex md:w-[72px] lg:w-[248px]">
       <div className="flex flex-col gap-3 px-3 pt-4 pb-3 md:items-center lg:items-stretch">
         <Link
           href="/dashboard"
@@ -62,13 +63,13 @@ export function Rail({
           onClick={openCommandPalette}
           aria-label="Search"
           className={cn(
-            "bg-background text-muted-foreground hover:text-foreground flex h-9 items-center gap-2 rounded-lg border px-2.5 text-sm transition-colors duration-150 md:w-9 md:justify-center md:px-0 lg:w-full lg:justify-start lg:px-2.5",
+            "bg-background text-muted-foreground hover:text-foreground flex h-9 items-center gap-2 rounded-full border px-3 text-sm transition-colors duration-150 md:w-9 md:justify-center md:px-0 lg:w-full lg:justify-start lg:px-2.5",
             FOCUS
           )}
         >
           <Search aria-hidden="true" className="size-4" />
           <span className="hidden flex-1 text-left lg:inline">Search</span>
-          <kbd className="bg-muted hidden rounded px-1.5 font-mono text-[11px] lg:inline">
+          <kbd className="bg-muted hidden rounded-full px-2 font-mono text-[11px] lg:inline">
             ⌘K
           </kbd>
         </button>
@@ -98,10 +99,10 @@ export function Rail({
                             href={entry.href}
                             aria-current={current ? "page" : undefined}
                             className={cn(
-                              "relative flex h-10 items-center gap-3 rounded-lg px-3 text-[15px] transition-colors duration-150 md:w-10 md:justify-center md:px-0 lg:w-full lg:justify-start lg:px-3",
+                              "relative flex h-10 items-center gap-3 rounded-full px-3 text-[15px] transition-colors duration-150 md:w-10 md:justify-center md:px-0 lg:w-full lg:justify-start lg:px-3",
                               FOCUS,
                               current
-                                ? "text-foreground font-semibold"
+                                ? "bg-brand/10 text-foreground font-semibold dark:bg-white/10"
                                 : "text-foreground/70 hover:bg-muted hover:text-foreground"
                             )}
                           />
@@ -131,7 +132,7 @@ export function Rail({
         ) && <GiveBackCard />}
       </nav>
 
-      <div className="flex flex-col items-center gap-1 border-t p-3 lg:flex-row-reverse lg:items-center">
+      <div className="flex flex-col items-center gap-1 p-3 lg:flex-row-reverse lg:items-center">
         {bell}
         <div className="min-w-0 lg:flex-1">
           <UserMenu user={user} variant="rail" />
@@ -142,26 +143,34 @@ export function Rail({
 }
 
 /**
- * The rail's one card, for members who can give: engraved ridges and the
- * emblem, so it reads as the institute asking rather than an ad. It ends the
- * scrolling nav, so it never covers an entry.
+ * The rail's one card, for members who can give: the campus itself, so it reads
+ * as the institute asking rather than an ad. It ends the scrolling nav, so it
+ * never covers an entry.
  */
 function GiveBackCard() {
   return (
     <div className="mt-6 hidden lg:block">
-      <div className="bg-background relative isolate overflow-hidden rounded-xl border px-4 pt-4 pb-3.5">
-        <Ridgelines className="absolute inset-x-0 bottom-0 -z-10 h-20 opacity-70" />
-        <Crest className="absolute -top-3 -right-3 -z-10 w-20 opacity-[0.12]" />
+      <div className="relative isolate overflow-hidden rounded-2xl bg-[oklch(var(--ink))] px-4 pt-14 pb-3.5 text-white">
+        <CampusImage
+          photo={CAMPUS_PHOTOS.domeAcademicAerial}
+          alt=""
+          sizes="224px"
+          className="-z-10 object-cover"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-gradient-to-t from-[oklch(var(--ink)/0.92)] via-[oklch(var(--ink)/0.65)] to-transparent"
+        />
         <p className="font-display text-[1.05rem] leading-tight font-semibold">
           Give back to NIT AP
         </p>
-        <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+        <p className="mt-1 text-xs leading-relaxed text-white/90">
           See the campaigns the alumni office is running this year.
         </p>
         <Link
           href="/donate"
           className={cn(
-            "bg-foreground text-background mt-3 inline-flex h-8 items-center rounded-lg px-3 text-xs font-semibold transition-transform duration-150 ease-out active:scale-[0.97]",
+            "mt-3 inline-flex h-8 items-center rounded-full bg-white px-3.5 text-xs font-semibold text-[oklch(var(--ink))] transition-transform duration-150 ease-out active:scale-[0.97]",
             FOCUS
           )}
         >

@@ -119,7 +119,9 @@ export default async function ProfilePage() {
       header={
         <>
           <div className="min-w-0 flex-1 leading-tight">
-            <h1 className="font-semibold tracking-tight">Edit profile</h1>
+            <h1 className="font-display text-xl font-semibold tracking-tight">
+              Edit profile
+            </h1>
             <p className="text-muted-foreground truncate text-xs">
               What batchmates see when they find you
             </p>

@@ -162,7 +162,7 @@ export default async function ProfileDetailsPage({
             <ArrowLeft aria-hidden className="size-5" />
           </Link>
           <div className="min-w-0 leading-tight">
-            <h1 className="truncate font-semibold tracking-tight">
+            <h1 className="font-display truncate text-xl font-semibold tracking-tight">
               Experience, education, skills & links
             </h1>
             <p className="text-muted-foreground truncate text-xs">

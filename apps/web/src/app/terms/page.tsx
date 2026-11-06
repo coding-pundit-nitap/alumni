@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { CAMPUS_PHOTOS } from "@/components/brand/campus-photos";
 import { LegalPage, LegalSection } from "@/components/common/legal-page";
 import { PublicShell } from "@/components/common/public-shell";
 import { publicPageMetadata } from "@/lib/seo";
@@ -20,6 +21,7 @@ export default async function TermsPage() {
     <PublicShell signedIn={signedIn}>
       <LegalPage
         title="Terms of use"
+        photo={CAMPUS_PHOTOS.crescentValley}
         intro={
           <p>
             The NIT Arunachal Pradesh Alumni Network is run by NIT Arunachal

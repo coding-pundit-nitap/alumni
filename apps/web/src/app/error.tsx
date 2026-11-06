@@ -2,9 +2,13 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@nitap/ui/components/button";
-import { AlertTriangle } from "lucide-react";
 
+import { CAMPUS_PHOTOS } from "@/components/brand/campus-photos";
+import {
+  PHOTO_PILL_GLASS,
+  PHOTO_PILL_SOLID,
+  PhotoPage,
+} from "@/components/common/photo-page";
 import { PublicShell } from "@/components/common/public-shell";
 
 export default function Error({
@@ -24,28 +28,35 @@ export default function Error({
 
   return (
     <PublicShell signedIn={false}>
-      <section className="dawn-glow flex min-h-[70vh] flex-col items-center justify-center px-4 py-20 text-center">
-        <AlertTriangle aria-hidden className="text-brand size-10" />
-        <h1 className="font-display mt-4 text-4xl tracking-tight md:text-5xl">
-          Something went wrong
-        </h1>
-        <p className="text-muted-foreground mt-3 max-w-md">
+      <PhotoPage
+        photo={CAMPUS_PHOTOS.domePanorama}
+        title="Something went wrong"
+      >
+        <p className="mt-4 max-w-md text-lg text-pretty text-white/90">
           An unexpected error occurred. Please try again.
         </p>
         {error.digest && (
-          <p className="text-muted-foreground mt-2 font-mono text-xs">
+          <p className="mt-2 font-mono text-xs text-white/80">
             Reference: {error.digest}. Quote this if you contact support.
           </p>
         )}
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button onClick={() => reset()} variant="default">
+          <button
+            type="button"
+            onClick={() => reset()}
+            className={PHOTO_PILL_SOLID}
+          >
             Try again
-          </Button>
-          <Button onClick={() => router.push("/")} variant="outline">
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/")}
+            className={PHOTO_PILL_GLASS}
+          >
             Go to Homepage
-          </Button>
+          </button>
         </div>
-      </section>
+      </PhotoPage>
     </PublicShell>
   );
 }

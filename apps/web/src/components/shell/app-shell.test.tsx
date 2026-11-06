@@ -8,6 +8,7 @@ vi.mock("./rail", () => ({
 }));
 vi.mock("./mobile-bar", () => ({ MobileBar: () => <header>mobile</header> }));
 vi.mock("./command-palette", () => ({ CommandPalette: () => null }));
+vi.mock("./campus-backdrop", () => ({ CampusBackdrop: () => null }));
 vi.mock("@/modules/notifications", () => ({
   NotificationBell: () => <span>bell</span>,
 }));

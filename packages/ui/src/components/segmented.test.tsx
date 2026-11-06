@@ -12,7 +12,7 @@ describe("Segmented", () => {
       </Segmented>
     );
     expect(screen.getByLabelText("View")).toHaveClass(
-      "rounded-lg",
+      "rounded-full",
       "border",
       "extra"
     );

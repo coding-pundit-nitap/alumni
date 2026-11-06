@@ -91,7 +91,7 @@ export default async function EventPage({
             muted={cancelled}
           />
           <div className="min-w-0 space-y-2">
-            <h1 className="text-2xl font-semibold tracking-tight text-balance">
+            <h1 className="font-display text-3xl font-semibold tracking-tight text-balance">
               {event.title}
             </h1>
             <EventBadges event={event} />

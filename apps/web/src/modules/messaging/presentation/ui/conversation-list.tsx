@@ -158,7 +158,9 @@ export function ConversationList({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex h-16 shrink-0 items-center justify-between gap-3 px-4">
-        <h1 className="text-lg font-semibold tracking-tight">Messages</h1>
+        <h1 className="font-display text-xl font-semibold tracking-tight">
+          Messages
+        </h1>
         <Link
           href="/messages/new-group"
           aria-label="New group"

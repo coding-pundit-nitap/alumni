@@ -108,7 +108,9 @@ export default async function MentorshipPage({
     <PageColumns
       header={
         <div className="min-w-0 flex-1 leading-tight">
-          <h1 className="truncate font-semibold tracking-tight">Mentorship</h1>
+          <h1 className="font-display truncate text-xl font-semibold tracking-tight">
+            Mentorship
+          </h1>
           <p className="text-muted-foreground truncate text-xs">
             {isMentor
               ? "Guide students from your department and beyond"

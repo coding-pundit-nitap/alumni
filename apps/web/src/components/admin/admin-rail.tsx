@@ -86,9 +86,9 @@ function Nav({
                 onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "focus-visible:ring-ring flex h-10 items-center gap-3 rounded-lg px-3 text-[15px] transition-colors duration-150 outline-none focus-visible:ring-2",
+                  "focus-visible:ring-ring flex h-10 items-center gap-3 rounded-full px-3 text-[15px] transition-colors duration-150 outline-none focus-visible:ring-2",
                   active
-                    ? "text-foreground font-semibold"
+                    ? "bg-brand/10 text-foreground font-semibold dark:bg-white/10"
                     : "text-foreground/70 hover:bg-muted hover:text-foreground"
                 )}
               >
@@ -115,7 +115,7 @@ export function AdminRail({ groups }: { groups: NavGroup[] }) {
     <>
       <aside
         aria-label="Administration"
-        className="sticky top-0 hidden h-svh w-[248px] shrink-0 flex-col border-r md:flex min-[1240px]:border-l"
+        className="glass-chrome sticky top-0 hidden h-svh w-[248px] shrink-0 flex-col md:flex"
       >
         <div className="flex h-[4.5rem] items-center gap-2 px-5">
           <Link href="/admin">
@@ -124,10 +124,10 @@ export function AdminRail({ groups }: { groups: NavGroup[] }) {
           <Badge variant="brand">Admin</Badge>
         </div>
         <Nav groups={groups} pathname={pathname} />
-        <div className="mt-auto border-t p-3">
+        <div className="mt-auto p-3">
           <Link
             href="/dashboard"
-            className="text-foreground/70 hover:bg-muted hover:text-foreground flex h-10 items-center gap-3 rounded-lg px-3 text-[15px] transition-colors duration-150"
+            className="text-foreground/70 hover:bg-muted hover:text-foreground flex h-10 items-center gap-3 rounded-full px-3 text-[15px] transition-colors duration-150"
           >
             <ArrowLeft aria-hidden className="size-4" />
             Back to app
@@ -135,7 +135,7 @@ export function AdminRail({ groups }: { groups: NavGroup[] }) {
         </div>
       </aside>
 
-      <header className="bg-background/80 sticky top-0 z-40 flex h-14 items-center gap-2 border-b px-4 backdrop-blur-md md:hidden">
+      <header className="glass-chrome sticky top-0 z-40 flex h-14 items-center gap-2 px-4 md:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
             render={
@@ -162,7 +162,7 @@ export function AdminRail({ groups }: { groups: NavGroup[] }) {
                 <Link
                   href="/dashboard"
                   onClick={() => setOpen(false)}
-                  className="text-muted-foreground hover:text-foreground flex h-9 items-center gap-3 rounded-lg px-3 text-sm"
+                  className="text-muted-foreground hover:text-foreground flex h-9 items-center gap-3 rounded-full px-3 text-sm"
                 >
                   <ArrowLeft aria-hidden className="size-4" />
                   Back to app

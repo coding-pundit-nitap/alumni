@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { CAMPUS_PHOTOS } from "@/components/brand/campus-photos";
 import { LegalPage, LegalSection } from "@/components/common/legal-page";
 import { PublicShell } from "@/components/common/public-shell";
 import { legalConfig } from "@/config/legal";
@@ -34,6 +35,7 @@ export default async function ContactPage() {
     <PublicShell signedIn={signedIn}>
       <LegalPage
         title="Contact"
+        photo={CAMPUS_PHOTOS.academicBlocks}
         intro={
           <p>
             The alumni office at NIT Arunachal Pradesh runs this network. Many

@@ -37,7 +37,7 @@ export default async function NewJobPage() {
       }
     >
       <div className="space-y-1 border-b px-4 py-6 sm:px-5">
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="font-display text-3xl font-semibold tracking-tight">
           Post a job or internship
         </h1>
         <p className="text-muted-foreground text-sm">

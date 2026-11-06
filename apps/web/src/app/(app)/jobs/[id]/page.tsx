@@ -108,7 +108,7 @@ export default async function JobPage({
                 {STATUS_LABEL[job.status]}
               </Badge>
             ) : null}
-            <h1 className="text-2xl font-semibold tracking-tight text-balance">
+            <h1 className="font-display text-3xl font-semibold tracking-tight text-balance">
               {job.title}
             </h1>
             <p className="text-muted-foreground">{job.company}</p>

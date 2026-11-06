@@ -21,7 +21,7 @@ export function AdminPageHeader({
 }) {
   return (
     // The same sticky bar as the member pages' headers; it bleeds over the layout's side padding.
-    <div className="bg-background/80 sticky top-14 z-10 -mx-4 flex min-h-14 flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b px-4 py-2.5 backdrop-blur-md sm:-mx-6 sm:px-6 md:top-0">
+    <div className="glass-chrome campus-clear-below sticky top-14 z-10 -mx-4 flex min-h-14 flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2.5 sm:-mx-6 sm:px-6 md:top-0">
       <div className="min-w-0">
         {back && (
           <Link
@@ -32,7 +32,7 @@ export function AdminPageHeader({
             {back.label}
           </Link>
         )}
-        <h1 className="flex items-center gap-2 text-base leading-tight font-semibold tracking-tight">
+        <h1 className="font-display flex items-center gap-2 text-xl leading-tight font-semibold tracking-tight">
           {title}
         </h1>
         {description && (
@@ -62,12 +62,19 @@ export function AdminPanel({
 }) {
   return (
     <section
-      className={cn("bg-card overflow-hidden rounded-xl border", className)}
+      className={cn(
+        "bg-card surface overflow-hidden rounded-3xl border",
+        className
+      )}
     >
       {(title || description || actions) && (
         <div className="flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3">
           <div>
-            {title && <h2 className="text-sm font-semibold">{title}</h2>}
+            {title && (
+              <h2 className="font-display text-lg font-semibold tracking-tight">
+                {title}
+              </h2>
+            )}
             {description && (
               <p className="text-muted-foreground mt-0.5 text-sm">
                 {description}
@@ -129,7 +136,6 @@ export function AdminPager({
         className={buttonVariants({
           variant: "outline",
           size: "sm",
-          className: "rounded-full",
         })}
       >
         {label}

@@ -77,7 +77,7 @@ export default async function ConnectionsPage({
       header={
         <>
           <div className="min-w-0 flex-1 leading-tight">
-            <h1 className="truncate font-semibold tracking-tight">
+            <h1 className="font-display truncate text-xl font-semibold tracking-tight">
               Your connections
             </h1>
             <p className="text-muted-foreground truncate text-xs">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { AdminRail } from "@/components/admin/admin-rail";
+import { CampusBackdrop } from "@/components/shell/campus-backdrop";
 import { adminNavigation, groupAdminNav } from "@/modules/admin";
 import { can, getActor } from "@/modules/auth";
 import { NO_INDEX } from "@/lib/seo";
@@ -24,9 +25,10 @@ export default async function AdminLayout({
 
   return (
     // Same centred frame as the member shell, so moving between the two doesn't jump.
-    <div className="mx-auto flex min-h-svh w-full max-w-[1240px] flex-col md:flex-row">
+    <div className="isolate mx-auto flex min-h-svh w-full max-w-[1240px] flex-col md:flex-row">
+      <CampusBackdrop />
       <AdminRail groups={groupAdminNav(items)} />
-      <main id="main" className="min-w-0 flex-1 md:border-r">
+      <main id="main" className="min-w-0 flex-1">
         <div className="px-4 pb-10 sm:px-6">{children}</div>
       </main>
     </div>

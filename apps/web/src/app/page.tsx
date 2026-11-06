@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import { CampusImage } from "@/components/brand/campus-image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { EyeOff, ShieldCheck, SlidersHorizontal } from "lucide-react";
 
 import { PublicShell } from "@/components/common/public-shell";
+import { CAMPUS_PHOTOS } from "@/components/brand/campus-photos";
 import { siteConfig } from "@/config/site";
 import { getActor } from "@/modules/auth";
 import { publicPageMetadata } from "@/lib/seo";
@@ -20,7 +21,7 @@ export const metadata: Metadata = publicPageMetadata({
 });
 
 const STATEMENT =
-  "You came to Jote for a degree and left with a batch. Alumni, students, faculty and staff, back in one place, with every account checked by the institute.".split(
+  "You came to Arunachal for a degree and left with a batch. Alumni, students, faculty and staff, back in one place, with every account checked by the institute.".split(
     " "
   );
 
@@ -75,7 +76,7 @@ export default async function LandingPage() {
   if (home) redirect(home);
   const signedIn = actor !== null;
   return (
-    <PublicShell signedIn={signedIn} overPhoto>
+    <PublicShell signedIn={signedIn}>
       {/* nosemgrep: nitap-dangerously-set-inner-html — constant JSON-LD from site config; a data block, so CSP does not run it. */}
       <script
         type="application/ld+json"
@@ -83,24 +84,23 @@ export default async function LandingPage() {
       />
 
       {/* Pulled up under the sticky header; the top strip keeps its 2.25rem. */}
-      <section className="relative isolate -mt-[4.25rem] flex min-h-[calc(100svh-2.25rem)] overflow-hidden bg-[oklch(0.17_0.025_262)]">
+      <section className="relative isolate -mt-[4.25rem] flex min-h-[calc(100svh-2.25rem)] overflow-hidden bg-[oklch(var(--ink))]">
         <div className="hero-photo absolute inset-0 -z-10 origin-[50%_55%]">
-          <Image
-            src="/images/campus-academic-blocks.png"
+          <CampusImage
+            photo={CAMPUS_PHOTOS.academicBlocks}
+            priority
             alt="The academic blocks of NIT Arunachal Pradesh under a wide blue sky, with forested hills behind them."
-            fill
-            preload
-            sizes="100vw"
+            sizes="max(100vw, 178vh)"
             className="object-cover object-top"
           />
         </div>
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-gradient-to-b from-[oklch(0.3_0.08_255/0.5)] via-transparent via-40% to-transparent"
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-[oklch(var(--ink)/0.5)] via-transparent via-40% to-transparent"
         />
         <div
           aria-hidden
-          className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-[oklch(0.17_0.025_262/0.82)] to-transparent"
+          className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-[oklch(var(--ink)/0.82)] to-transparent"
         />
         {/* Headline in the sky, action on the field: the buildings stay clear. */}
         <div className="hero-copy mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-8 px-4 pt-[calc(4.25rem+clamp(1.5rem,5vh,3.5rem))] pb-[clamp(1.5rem,5vh,3rem)] text-center text-white sm:px-8">
@@ -214,17 +214,16 @@ export default async function LandingPage() {
       </section>
 
       <section className="relative isolate flex min-h-svh items-end justify-center overflow-hidden px-4 pt-24 pb-[clamp(2.5rem,8vh,5rem)] text-center text-white sm:px-8">
-        <div className="photo-open absolute inset-0 -z-10 bg-[oklch(0.17_0.025_262)]">
-          <Image
-            src="/images/campus-hillside-aerial.png"
+        <div className="photo-open absolute inset-0 -z-10 bg-[oklch(var(--ink))]">
+          <CampusImage
+            photo={CAMPUS_PHOTOS.hillsideAerial}
             alt="The campus from the air: the domed building and long blocks strung along one road through the forest."
-            fill
-            sizes="100vw"
+            sizes="max(100vw, 178vh)"
             className="object-cover"
           />
           <div
             aria-hidden
-            className="absolute inset-0 bg-gradient-to-t from-[oklch(0.17_0.025_262/0.92)] via-[oklch(0.17_0.025_262/0.55)] via-40% to-transparent to-75%"
+            className="absolute inset-0 bg-gradient-to-t from-[oklch(var(--ink)/0.92)] via-[oklch(var(--ink)/0.55)] via-40% to-transparent to-75%"
           />
         </div>
         <div className="flex flex-col items-center">

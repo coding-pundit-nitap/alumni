@@ -30,7 +30,9 @@ export default async function DonatePage() {
       header={
         <>
           <div className="min-w-0 flex-1 leading-tight">
-            <h1 className="truncate font-semibold tracking-tight">Donate</h1>
+            <h1 className="font-display truncate text-xl font-semibold tracking-tight">
+              Donate
+            </h1>
             <p className="text-muted-foreground truncate text-xs">
               Support the institute. You pay directly; we record your pledge.
             </p>

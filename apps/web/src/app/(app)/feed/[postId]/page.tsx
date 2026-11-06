@@ -64,7 +64,9 @@ export default async function PostPage({
             <ArrowLeft aria-hidden className="size-5" />
           </Link>
           <div className="min-w-0 leading-tight">
-            <h1 className="font-semibold tracking-tight">Post</h1>
+            <h1 className="font-display text-xl font-semibold tracking-tight">
+              Post
+            </h1>
             <p className="text-muted-foreground truncate text-xs">
               by {post.author.fullName}
             </p>

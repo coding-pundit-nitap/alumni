@@ -43,7 +43,7 @@ export default async function MyJobsPage({
       header={
         <>
           <div className="min-w-0 flex-1 leading-tight">
-            <h1 className="truncate font-semibold tracking-tight">
+            <h1 className="font-display truncate text-xl font-semibold tracking-tight">
               My job postings
             </h1>
             <p className="text-muted-foreground truncate text-xs">

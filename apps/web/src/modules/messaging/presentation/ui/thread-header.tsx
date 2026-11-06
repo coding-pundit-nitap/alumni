@@ -34,7 +34,9 @@ export function PaneHeader({
       </Link>
       {avatar}
       <div className="min-w-0 flex-1 leading-tight">
-        <h1 className="truncate font-semibold tracking-tight">{title}</h1>
+        <h1 className="font-display truncate text-xl font-semibold tracking-tight">
+          {title}
+        </h1>
         {subtitle ? (
           <p className="text-muted-foreground truncate text-xs">{subtitle}</p>
         ) : null}

@@ -41,6 +41,16 @@ const nextConfig: NextConfig = {
           production: process.env.NODE_ENV === "production",
         }),
       },
+      // Pre-encoded photos with a content hash in the name, so a new photo gets a new URL.
+      {
+        source: "/images/campus/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
   // S3_PUBLIC_PATH is served by src/app/storage/[...path]/route.ts, not a rewrite: rewrites are fixed at build

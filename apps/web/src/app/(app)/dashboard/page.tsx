@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CampusImage } from "@/components/brand/campus-image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -22,6 +23,7 @@ import {
 } from "@nitap/ui/components/segmented";
 
 import { PageColumns } from "@/components/shell/page-columns";
+import { CAMPUS_PHOTOS } from "@/components/brand/campus-photos";
 import {
   getPinnedAnnouncement,
   getViewerAuthor,
@@ -78,9 +80,6 @@ export default async function DashboardPage({
     <PageColumns
       header={
         <>
-          <Suspense fallback={<BlockSkeleton rows={1} />}>
-            <Greeting actor={actor} />
-          </Suspense>
           <nav aria-label="Home sections" className="ml-auto">
             <Segmented>
               <Link
@@ -102,6 +101,24 @@ export default async function DashboardPage({
       }
       aside={<Widgets actor={actor} />}
     >
+      <div className="px-4 pt-4 sm:px-5">
+        <div className="relative isolate flex h-44 items-end overflow-hidden rounded-3xl bg-[oklch(var(--ink))] p-5 text-white sm:h-52 sm:p-6">
+          <CampusImage
+            photo={CAMPUS_PHOTOS.hostelRoad}
+            priority
+            alt=""
+            sizes="(min-width: 1280px) 620px, (min-width: 768px) 70vw, 100vw"
+            className="-z-10 object-cover object-[30%_45%]"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 -z-10 bg-gradient-to-t from-[oklch(var(--ink)/0.85)] to-transparent to-70%"
+          />
+          <Suspense fallback={<BlockSkeleton rows={1} />}>
+            <Greeting actor={actor} />
+          </Suspense>
+        </div>
+      </div>
       <div className="border-b px-4 py-4 empty:hidden sm:px-5 xl:hidden">
         <WidgetStrip actor={actor} />
       </div>

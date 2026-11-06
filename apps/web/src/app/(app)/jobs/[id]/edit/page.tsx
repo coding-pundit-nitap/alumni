@@ -75,7 +75,7 @@ export default async function EditJobPage({
       }
     >
       <div className="space-y-3 border-b px-4 py-6 sm:px-5">
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="font-display text-3xl font-semibold tracking-tight">
           Edit job posting
         </h1>
         <p className="text-muted-foreground text-sm">

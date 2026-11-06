@@ -124,7 +124,7 @@ export function ProfileCard({
             </div>
           ) : null}
         </div>
-        <h1 className="mt-4 text-2xl font-semibold tracking-tight">
+        <h1 className="font-display mt-4 text-3xl font-semibold tracking-tight">
           {view.fullName}
         </h1>
         {tick ? (

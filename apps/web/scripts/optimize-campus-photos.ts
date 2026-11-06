@@ -1,0 +1,157 @@
+import { createHash } from "node:crypto";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+
+import sharp from "sharp";
+
+/**
+ * Encodes the campus photos ahead of time, because the settings that keep them
+ * sharp and small take around 30 seconds per image, far too slow for a request.
+ * Reads the masters in assets/campus, writes every size to public/images/campus
+ * under content-hashed names, and regenerates
+ * src/components/brand/campus-photos.ts. Rerun with `pnpm images:build` after
+ * adding or replacing a master.
+ */
+
+const MASTERS = "assets/campus";
+const OUTPUT = "public/images/campus";
+const MODULE = "src/components/brand/campus-photos.ts";
+
+const WIDTHS = [320, 640, 828, 1080, 1280, 1440, 1672];
+const AVIF = { quality: 60, effort: 6, chromaSubsampling: "4:2:0" } as const;
+/**
+ * Busier photos that need more than the default to stay as close to their
+ * master.
+ */
+const AVIF_QUALITY: Record<string, number> = {
+  "campus-crescent-aerial": 63,
+  "campus-dome-academic-aerial": 65,
+};
+const WEBP = { quality: 76, effort: 6, smartSubsample: true } as const;
+const FALLBACK_WIDTH = 1080;
+const PARALLEL_PHOTOS = 3;
+
+const NAMES: Record<string, string> = {
+  "campus-academic-blocks": "academicBlocks",
+  "campus-crescent-aerial": "crescentAerial",
+  "campus-crescent-valley": "crescentValley",
+  "campus-dome-academic-aerial": "domeAcademicAerial",
+  "campus-dome-panorama": "domePanorama",
+  "campus-hillside-aerial": "hillsideAerial",
+  "campus-hostel-road": "hostelRoad",
+};
+
+/**
+ * New files are built here and copied in together at the end: a dev server
+ * watches public/, and a stream of new files there disturbs it for the whole
+ * run.
+ */
+const STAGING = fs.mkdtempSync(path.join(os.tmpdir(), "campus-photos-"));
+
+/** The file names this run wants, so anything left over can be removed. */
+const expected = new Set<string>();
+
+/** A tiny photo inside a blurring SVG, shown until the real image arrives. */
+async function placeholder(input: Buffer) {
+  const tiny = await sharp(input)
+    .resize(24)
+    .webp({ quality: 45 })
+    .toBuffer({ resolveWithObject: true });
+  const href = `data:image/webp;base64,${tiny.data.toString("base64")}`;
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${tiny.info.width} ${tiny.info.height}' preserveAspectRatio='xMidYMid slice'><filter id='b' color-interpolation-filters='sRGB'><feGaussianBlur stdDeviation='1'/></filter><image width='100%' height='100%' preserveAspectRatio='none' filter='url(#b)' href='${href}'/></svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+
+async function encode(file: string) {
+  const name = path.basename(file, ".png");
+  const input = fs.readFileSync(path.join(MASTERS, file));
+  const quality = AVIF_QUALITY[name] ?? AVIF.quality;
+  const hash = createHash("sha256")
+    .update(input)
+    .update(AVIF_QUALITY[name] ? String(quality) : "")
+    .digest("hex")
+    .slice(0, 8);
+  const url = (width: number, format: string) =>
+    `/images/campus/${name}-${hash}-${width}.${format}`;
+  const list = (format: string) =>
+    WIDTHS.map((width) => `${url(width, format)} ${width}w`).join(", ");
+
+  for (const width of WIDTHS) {
+    const resized = sharp(input).resize(width);
+    const avif = url(width, "avif");
+    const webp = url(width, "webp");
+    expected.add(path.basename(avif)).add(path.basename(webp));
+    if (fs.existsSync(`public${avif}`) && fs.existsSync(`public${webp}`)) {
+      continue;
+    }
+    await resized
+      .clone()
+      .avif({ ...AVIF, quality })
+      .toFile(path.join(STAGING, path.basename(avif)));
+    await resized
+      .clone()
+      .webp(WEBP)
+      .toFile(path.join(STAGING, path.basename(webp)));
+    console.log(`${name} ${width}`);
+  }
+
+  return [
+    NAMES[name] ?? name,
+    {
+      avif: list("avif"),
+      webp: list("webp"),
+      fallback: url(FALLBACK_WIDTH, "webp"),
+      placeholder: await placeholder(input),
+    },
+  ] as const;
+}
+
+async function main() {
+  fs.mkdirSync(OUTPUT, { recursive: true });
+
+  const files = fs.readdirSync(MASTERS).filter((f) => f.endsWith(".png"));
+  const queue = [...files];
+  const photos: (readonly [string, object])[] = [];
+  await Promise.all(
+    Array.from({ length: PARALLEL_PHOTOS }, async () => {
+      for (let file = queue.shift(); file; file = queue.shift()) {
+        photos.push(await encode(file));
+      }
+    })
+  );
+
+  for (const file of fs.readdirSync(STAGING)) {
+    fs.copyFileSync(path.join(STAGING, file), path.join(OUTPUT, file));
+  }
+  fs.rmSync(STAGING, { recursive: true });
+  for (const file of fs.readdirSync(OUTPUT)) {
+    if (!expected.has(file)) fs.rmSync(path.join(OUTPUT, file));
+  }
+
+  const entries = photos
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, photo]) => `  ${key}: ${JSON.stringify(photo)},`)
+    .join("\n");
+  fs.writeFileSync(
+    MODULE,
+    `// Generated by scripts/optimize-campus-photos.ts. Do not edit by hand.
+
+export type CampusPhoto = {
+  /** Comma-separated AVIF candidates for srcset. */
+  avif: string;
+  /** Comma-separated WebP candidates for srcset. */
+  webp: string;
+  fallback: string;
+  /** A CSS background shown until the full image arrives. */
+  placeholder: string;
+};
+
+export const CAMPUS_PHOTOS = {
+${entries}
+} satisfies Record<string, CampusPhoto>;
+`
+  );
+}
+
+await main();

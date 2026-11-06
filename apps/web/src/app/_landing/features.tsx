@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { CampusImage } from "@/components/brand/campus-image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
+import { CAMPUS_PHOTOS } from "@/components/brand/campus-photos";
+
 const SCENES = [
   {
-    photo: "/images/campus-hostel-road.png",
+    photo: CAMPUS_PHOTOS.hostelRoad,
     alt: "A long hostel block on a forested hillside, with the campus road winding past it.",
     headline: "You shared a hostel. Find them again.",
     panelSide: "md:ml-auto",
@@ -23,7 +25,7 @@ const SCENES = [
     ],
   },
   {
-    photo: "/images/campus-dome-panorama.png",
+    photo: CAMPUS_PHOTOS.domePanorama,
     alt: "The road climbing past the domed building towards the hostels, with forested hills behind.",
     headline: "Someone already took this road.",
     panelSide: "",
@@ -39,7 +41,7 @@ const SCENES = [
     ],
   },
   {
-    photo: "/images/campus-dome-academic-aerial.png",
+    photo: CAMPUS_PHOTOS.domeAcademicAerial,
     alt: "The domed building and an academic block seen from above, with forest rising behind them.",
     headline: "There is always a reason to come back.",
     panelSide: "md:ml-auto",
@@ -86,18 +88,16 @@ export function Features({ signedIn }: { signedIn: boolean }) {
   return (
     <section
       aria-label="What you can do"
-      className="relative bg-[oklch(0.17_0.025_262)]"
+      className="relative bg-[oklch(var(--ink))]"
     >
       <div className="sticky top-0 h-svh overflow-hidden">
         <div className="absolute inset-0">
           {SCENES.map(({ photo, alt }, i) => (
-            <Image
-              key={photo}
-              src={photo}
-              alt={alt}
-              fill
-              sizes="100vw"
-              aria-hidden={i !== active}
+            <CampusImage
+              photo={photo}
+              key={photo.fallback}
+              alt={i === active ? alt : ""}
+              sizes="max(100vw, 178vh)"
               className={`story-photo object-cover ${i === active ? "is-active" : ""}`}
             />
           ))}
@@ -107,7 +107,7 @@ export function Features({ signedIn }: { signedIn: boolean }) {
       <div className="relative -mt-[100svh]">
         {SCENES.map(({ photo, headline, panelSide, items }, i) => (
           <div
-            key={photo}
+            key={photo.fallback}
             ref={(el) => {
               sceneRefs.current[i] = el;
             }}

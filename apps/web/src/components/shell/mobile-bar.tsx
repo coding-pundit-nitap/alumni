@@ -49,7 +49,7 @@ export function MobileBar({
 
   return (
     <>
-      <header className="bg-background/85 sticky top-0 z-40 flex h-14 items-center gap-1 border-b px-4 backdrop-blur md:hidden">
+      <header className="glass-chrome sticky top-0 z-40 flex h-14 items-center gap-1 px-4 md:hidden">
         <Link
           href="/dashboard"
           aria-label={`${siteConfig.shortName} home`}
@@ -71,7 +71,7 @@ export function MobileBar({
 
       <nav
         aria-label="Mobile"
-        className="bg-background/95 fixed inset-x-0 bottom-0 z-40 grid border-t pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+        className="glass-chrome fixed inset-x-0 bottom-0 z-40 grid pb-[env(safe-area-inset-bottom)] md:hidden"
         style={{
           gridTemplateColumns: `repeat(${nav.tabs.length + 1}, minmax(0, 1fr))`,
         }}
@@ -109,7 +109,7 @@ export function MobileBar({
           </SheetTrigger>
           <SheetContent
             side="bottom"
-            className="max-h-[80svh] overflow-y-auto rounded-t-2xl pb-[calc(1rem+env(safe-area-inset-bottom))]"
+            className="max-h-[80svh] overflow-y-auto rounded-t-3xl pb-[calc(1rem+env(safe-area-inset-bottom))]"
           >
             <SheetHeader>
               <SheetTitle>Menu</SheetTitle>
@@ -150,10 +150,10 @@ export function MobileBar({
                             onClick={() => setMoreOpen(false)}
                             aria-current={current ? "page" : undefined}
                             className={cn(
-                              "flex h-11 items-center gap-3 rounded-lg px-2 text-sm",
+                              "flex h-11 items-center gap-3 rounded-full px-3 text-sm",
                               FOCUS,
                               current
-                                ? "bg-brand/10 font-medium"
+                                ? "bg-brand/10 font-medium dark:bg-white/10"
                                 : "hover:bg-accent"
                             )}
                           >

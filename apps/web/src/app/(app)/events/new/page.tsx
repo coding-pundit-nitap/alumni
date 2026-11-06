@@ -36,7 +36,9 @@ export default async function NewEventPage() {
       }
     >
       <div className="space-y-1 border-b px-4 py-6 sm:px-5">
-        <h1 className="text-2xl font-semibold tracking-tight">Create event</h1>
+        <h1 className="font-display text-3xl font-semibold tracking-tight">
+          Create event
+        </h1>
         <p className="text-muted-foreground text-sm">
           Members can register as soon as you publish. Times are in the zone you
           pick.

@@ -32,7 +32,7 @@ export default function GlobalError({
           )}
           <button
             onClick={() => reset()}
-            className="bg-primary text-primary-foreground focus-visible:ring-ring mt-8 rounded-lg px-4 py-2 text-sm font-medium transition-opacity duration-150 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="bg-primary text-primary-foreground focus-visible:ring-ring mt-8 rounded-full px-6 py-2.5 text-sm font-semibold transition-[opacity,scale] duration-150 hover:opacity-90 active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             Restart Application
           </button>
