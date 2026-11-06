@@ -10,13 +10,11 @@ import {
 } from "@/app/(app)/profile/photo-actions";
 import { AdminPageHeader, AdminPanel } from "@/components/admin/admin-surface";
 import { listContactCoordinators } from "@/composition/admin";
-import {
-  COORDINATOR_GROUPS,
-  CoordinatorDialog,
-  CoordinatorTable,
-} from "@/modules/admin";
+import { COORDINATOR_GROUPS } from "@/modules/admin";
 import { can, getActor } from "@/modules/auth";
 
+import { CoordinatorDialog } from "./_components/coordinator-dialog";
+import { CoordinatorTable } from "./_components/coordinator-table";
 import { removeCoordinatorAction, saveCoordinatorAction } from "./actions";
 
 export const metadata: Metadata = { title: "Coordinators" };

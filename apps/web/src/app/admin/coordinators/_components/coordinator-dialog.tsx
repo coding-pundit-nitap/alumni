@@ -4,14 +4,14 @@ import { useId, useState, type ComponentProps } from "react";
 
 import { Input } from "@nitap/ui/components/input";
 
-import { PhotoUpload } from "@/modules/uploads";
-
 import {
+  ConfirmButton,
   coordinatorPhotoUrl,
+  type AccessAction,
   type ContactCoordinator,
   type CoordinatorKind,
-} from "../../domain/contact-coordinator";
-import { ConfirmButton, type AccessAction } from "./confirm-button";
+} from "@/modules/admin";
+import { PhotoUpload } from "@/modules/uploads/client";
 
 export type CoordinatorPhotoActions = Pick<
   ComponentProps<typeof PhotoUpload>,

@@ -1,8 +1,10 @@
 import {
+  ConfirmButton,
   coordinatorPhotoUrl,
+  type AccessAction,
   type ContactCoordinator,
-} from "../../domain/contact-coordinator";
-import { ConfirmButton, type AccessAction } from "./confirm-button";
+} from "@/modules/admin";
+
 import {
   CoordinatorDialog,
   type CoordinatorPhotoActions,

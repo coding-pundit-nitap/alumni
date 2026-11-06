@@ -39,8 +39,6 @@ export type {
   ContactCoordinator,
   CoordinatorKind,
 } from "./domain/contact-coordinator";
-export { CoordinatorDialog } from "./presentation/ui/coordinator-dialog";
-export { CoordinatorTable } from "./presentation/ui/coordinator-table";
 export type { GetAnalytics } from "./application/get-analytics";
 export type { AnalyticsStore } from "./application/admin-store";
 export { ANALYTICS_RANGES, RANGE_DAYS } from "./domain/analytics";
@@ -93,6 +91,7 @@ export {
 } from "./presentation/ui/access-list";
 export { AccountStateDialog } from "./presentation/ui/account-state-dialog";
 export { ConfirmButton } from "./presentation/ui/confirm-button";
+export type { AccessAction } from "./presentation/ui/confirm-button";
 export { AssignRoleDialog } from "./presentation/ui/assign-role-dialog";
 export { GrantPermissionDialog } from "./presentation/ui/grant-permission-dialog";
 export { UserFilters } from "./presentation/ui/user-filters";
