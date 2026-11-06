@@ -35,13 +35,13 @@
   },
   "dependencies": {
     "@nitap/jobs": "workspace:*",
-    "@prisma/adapter-pg": "7.10.0",
-    "@prisma/client": "7.10.0"
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1"
   },
   "devDependencies": {
     "@types/node": "^26.6.2",
     "dotenv": "^18.0.1",
-    "prisma": "7.10.0",
+    "prisma": "7.10.1",
     "vitest": "^5.0.1"
   }
 }

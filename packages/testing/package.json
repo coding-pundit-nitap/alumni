@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@nitap/database": "workspace:*",
-    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/adapter-pg": "7.10.1",
     "ioredis": "6.0.0",
     "pg": "^8.23.0",
     "smtp-server": "^3.19.13",
