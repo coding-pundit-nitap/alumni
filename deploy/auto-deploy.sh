@@ -134,7 +134,8 @@ github_repo() {
 # Success only when every CI OK run for the commit concluded success. Absent, running and failed all wait.
 ci_passed() {
   local sha=$1 response code conclusions
-  response=$(curl -s -m "$NET_TIMEOUT_S" -w '\n%{http_code}' -H 'accept: application/vnd.github+json' \
+  # -L: GitHub answers a renamed repository's old name with a redirect.
+  response=$(curl -sL -m "$NET_TIMEOUT_S" -w '\n%{http_code}' -H 'accept: application/vnd.github+json' \
     "https://api.github.com/repos/$(github_repo)/commits/$sha/check-runs?check_name=CI%20OK&filter=latest") ||
     response=$'\n000'
   code=${response##*$'\n'}

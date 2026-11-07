@@ -91,7 +91,7 @@ esac
 
 const CURL = `${COMMON}
 args="$*"
-url=; out=-; headers=; write=0; fail=0
+url=; out=-; headers=; write=0; fail=0; follow=0
 while [ $# -gt 0 ]; do
   case "$1" in
     -o) out=$2; shift 2 ;;
@@ -99,6 +99,7 @@ while [ $# -gt 0 ]; do
     -w) write=1; shift 2 ;;
     -m | -X | -H | --data) shift 2 ;;
     -sf) fail=1; shift ;;
+    -sL) follow=1; shift ;;
     -s) shift ;;
     *) url=$1; shift ;;
   esac
@@ -119,6 +120,7 @@ app() {
 case "$url" in
   *api.github.com*)
     code=$(s ci-http 200)
+    if [ "$code" = 301 ] && [ "$follow" = 1 ]; then code=200; fi
     case "$(s ci success)" in
       success) body='{"check_runs": [{"conclusion": "success"}]}' ;;
       failure) body='{"check_runs": [{"conclusion": "failure"}]}' ;;
@@ -392,6 +394,13 @@ void describe("server off or no internet", () => {
       assert.equal(box.run().status, 0, code);
     }
     assertNotReleased(box);
+  });
+
+  void it("follows GitHub's redirect for a renamed repository", () => {
+    const box = sandbox();
+    box.set("ci-http", "301");
+    assert.equal(box.run().status, 0);
+    assertReleased(box);
   });
 
   void it("waits when the registry cannot be reached", () => {

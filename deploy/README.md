@@ -66,11 +66,11 @@ Docker-published ports bypass `ufw`. That is safe here only because `compose.yml
 
 ```bash
 sudo mkdir -p /opt/alumini && sudo chown $USER /opt/alumini
-git clone https://github.com/OWNER/alumini.git /opt/alumini
+git clone https://github.com/OWNER/alumni.git /opt/alumini
 ```
 
 For a private repository, add a read-only deploy key: `ssh-keygen -t ed25519 -f ~/.ssh/alumini_deploy`, add
-the `.pub` under GitHub → Settings → Deploy keys, then clone with `git@github.com:OWNER/alumini.git`.
+the `.pub` under GitHub → Settings → Deploy keys, then clone with `git@github.com:OWNER/alumni.git`.
 
 ### 3. TLS certificate and Nginx
 
@@ -109,7 +109,7 @@ Fill in:
 - `DEPLOY_ENV=production` (or `staging` on the staging server, see [Staging](#staging)).
 - `IMAGE_REGISTRY=ghcr.io/owner`, lowercase. Not needed in build mode.
 - `RUNBOOK_BASE` (optional): where alert `runbook_url`s point, e.g.
-  `https://github.com/owner/alumini/blob/main/ops/runbooks`. Unset, `monitoring.sh` derives it from the
+  `https://github.com/owner/alumni/blob/main/ops/runbooks`. Unset, `monitoring.sh` derives it from the
   clone's GitHub `origin`.
 - `STAGING_RELEASES` (production): where `promote` reads staging's `releases.log`, e.g.
   `deploy@staging.example.org:/opt/alumini/deploy/releases.log`. Give this server's user an ssh key that
