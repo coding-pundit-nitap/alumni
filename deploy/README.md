@@ -389,6 +389,14 @@ The site is down for a few seconds while web restarts, so release outside busy h
 /opt/alumini/deploy/deploy.sh rollback <old-sha>   # earlier images, no git or database change
 ```
 
+**Grafana through NPM,** when an SSH tunnel is not possible. Prometheus and Alertmanager have no login and stay on
+`127.0.0.1`. In `monitoring.env`, set `GRAFANA_BIND` to this server's address as NPM reaches it, and `GRAFANA_URL`
+to `https://grafana.YOUR.DOMAIN`, then `./monitoring.sh up -d`. The firewall rule from step 1 matches the container
+port, which is 3000 for Grafana too, so it already admits only NPM: confirm with `sudo iptables -S DOCKER-USER`.
+In NPM, add a Proxy Host forwarding to `<server IP>` port `3030` over `http`, with Websockets on, and on the SSL tab
+a certificate with Force SSL. An Access List limited to your own addresses is worth adding: the public login page
+is otherwise open to password guessing.
+
 Rollback re-pulls a pruned image from the registry by its digest. Without the registry (GitHub down, the token
 expired), `deploy/deploy.sh build` builds the same commit on the server instead; it needs ~4 GB of free RAM, so
 an 8 GB server.
