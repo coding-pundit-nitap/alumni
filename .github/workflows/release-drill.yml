@@ -11,6 +11,7 @@ on:
     paths:
       - deploy/compose.yml
       - deploy/deploy.sh
+      - deploy/auto-deploy.sh
       - deploy/monitoring.yml
       - deploy/monitoring.sh
       - docker/**

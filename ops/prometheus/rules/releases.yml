@@ -1,0 +1,32 @@
+# Automatic releases. deploy/auto-deploy.sh writes these for node_exporter's textfile collector, only on a host
+# that runs alumini-deploy.timer. `for` lets a host that was just off catch up before anything fires.
+groups:
+  - name: releases
+    rules:
+      - alert: AutoDeployBlocked
+        expr: alumini_auto_deploy_blocked == 1
+        labels: { severity: ticket, service: deploy }
+        annotations:
+          summary: "Automatic releases need a person"
+          description: "The last automatic release failed, or the host cannot release on its own. journalctl -u alumini-deploy says why."
+          runbook_url: "{{ $externalLabels.runbook_base }}/R-16.md"
+
+      - alert: AutoDeployOffline
+        expr: time() - alumini_auto_deploy_last_check_timestamp_seconds > 6 * 3600
+        for: 15m
+        labels: { severity: ticket, service: deploy }
+        annotations:
+          summary: "The host has not reached GitHub and the registry for 6 hours"
+          description: "The last successful check was {{ $value | humanizeDuration }} ago, so new releases cannot arrive."
+          runbook_url: "{{ $externalLabels.runbook_base }}/R-16.md"
+
+      - alert: AutoDeployBehind
+        expr: |
+          (time() - alumini_auto_deploy_pending_since_timestamp_seconds > 6 * 3600)
+            and alumini_auto_deploy_pending_since_timestamp_seconds > 0
+        for: 15m
+        labels: { severity: ticket, service: deploy }
+        annotations:
+          summary: "The host has been behind main for 6 hours"
+          description: "It fell behind {{ $value | humanizeDuration }} ago. The newest commit on main has not passed CI, or its images are not published."
+          runbook_url: "{{ $externalLabels.runbook_base }}/R-16.md"

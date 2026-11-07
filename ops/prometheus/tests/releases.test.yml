@@ -1,0 +1,89 @@
+rule_files:
+  - ../rules/releases.yml
+evaluation_interval: 1m
+
+tests:
+  # A release failed: a ticket at once.
+  - interval: 1m
+    external_labels: { runbook_base: https://runbooks.test }
+    input_series:
+      - series: 'alumini_auto_deploy_blocked{job="node",instance="h"}'
+        values: "0 0 1 1 1"
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: AutoDeployBlocked
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: AutoDeployBlocked
+        exp_alerts:
+          - exp_labels:
+              { severity: ticket, service: deploy, job: node, instance: h }
+            exp_annotations:
+              summary: "Automatic releases need a person"
+              description: "The last automatic release failed, or the host cannot release on its own. journalctl -u alumini-deploy says why."
+              runbook_url: https://runbooks.test/R-16.md
+
+  # The last check was at t=0: quiet at 6 hours, a ticket once the 15 minutes pass.
+  - interval: 5m
+    external_labels: { runbook_base: https://runbooks.test }
+    input_series:
+      - series: 'alumini_auto_deploy_last_check_timestamp_seconds{job="node",instance="h"}'
+        values: "0x90"
+    alert_rule_test:
+      - eval_time: 6h
+        alertname: AutoDeployOffline
+        exp_alerts: []
+      - eval_time: 6h20m
+        alertname: AutoDeployOffline
+        exp_alerts:
+          - exp_labels:
+              { severity: ticket, service: deploy, job: node, instance: h }
+            exp_annotations:
+              summary: "The host has not reached GitHub and the registry for 6 hours"
+              description: "The last successful check was 6h 20m 0s ago, so new releases cannot arrive."
+              runbook_url: https://runbooks.test/R-16.md
+
+  # A host that came back and checked again before the 15 minutes passed: pending, then quiet.
+  - interval: 5m
+    external_labels: { runbook_base: https://runbooks.test }
+    input_series:
+      - series: 'alumini_auto_deploy_last_check_timestamp_seconds{job="node",instance="h"}'
+        values: "0x74 22500+300x10"
+    alert_rule_test:
+      - eval_time: 6h10m
+        alertname: AutoDeployOffline
+        exp_alerts: []
+      - eval_time: 6h20m
+        alertname: AutoDeployOffline
+        exp_alerts: []
+
+  # Behind main since t=300 s.
+  - interval: 5m
+    external_labels: { runbook_base: https://runbooks.test }
+    input_series:
+      - series: 'alumini_auto_deploy_pending_since_timestamp_seconds{job="node",instance="h"}'
+        values: "300x90"
+    alert_rule_test:
+      - eval_time: 6h
+        alertname: AutoDeployBehind
+        exp_alerts: []
+      - eval_time: 6h25m
+        alertname: AutoDeployBehind
+        exp_alerts:
+          - exp_labels:
+              { severity: ticket, service: deploy, job: node, instance: h }
+            exp_annotations:
+              summary: "The host has been behind main for 6 hours"
+              description: "It fell behind 6h 20m 0s ago. The newest commit on main has not passed CI, or its images are not published."
+              runbook_url: https://runbooks.test/R-16.md
+
+  # 0 means up to date, however old that timestamp would be.
+  - interval: 5m
+    external_labels: { runbook_base: https://runbooks.test }
+    input_series:
+      - series: 'alumini_auto_deploy_pending_since_timestamp_seconds{job="node",instance="h"}'
+        values: "0x90"
+    alert_rule_test:
+      - eval_time: 7h
+        alertname: AutoDeployBehind
+        exp_alerts: []

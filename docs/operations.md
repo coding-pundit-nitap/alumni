@@ -27,6 +27,8 @@ restarts empty, uploads are mirrored daily, and monitoring data isn't backed up 
   first; production promotes exactly the digests that passed staging's smoke test.
 - Migrations run before the new app starts and must be expand-only, so the previous release still works on
   the new schema. That's what makes `deploy.sh rollback` safe without a down-migration.
+- `alumini-deploy.timer` can release each commit that passed all of CI, on a host without staging or on staging
+  itself. It catches up after downtime and rolls back a failed release.
 - The worker is backwards compatible with older job payloads; a payload with a newer version waits instead
   of failing.
 - The release and restore drills (`.github/workflows/release-drill.yml`, `restore-drill.yml`) run monthly

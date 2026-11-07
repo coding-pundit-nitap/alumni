@@ -146,10 +146,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
       - run: node packages/scripts/check-ops.ts
+      - run: pnpm test:deploy
 
   dependency-audit:
     name: Dependency audit (high and critical)

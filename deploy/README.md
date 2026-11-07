@@ -16,6 +16,7 @@ Internet ─▶ Nginx on the host (TLS, rate limit, 6 MB bodies) ─▶ 127.0.0.
 | `compose.yml`        | Production services. Only `web` is published, on `127.0.0.1:3000` (`WEB_BIND`, `WEB_PORT`) |
 | `.env.example`       | Template for `deploy/.env` (gitignored): environment, secrets, domain, SMTP                |
 | `deploy.sh`          | `build` / `pull` / `promote <sha> <approver>` / `rollback <sha>` / `smoke` / `status`      |
+| `auto-deploy.sh`     | Releases new green commits on its own, run by the units in `systemd/`                      |
 | `nginx/alumini.conf` | Host Nginx site                                                                            |
 | `monitoring.yml`     | Prometheus, Alertmanager, Grafana and exporters, run with `monitoring.sh` (step 9)         |
 
@@ -376,8 +377,10 @@ location ~ ^/(metrics|health/drain)$ { deny all; }
 /opt/alumini/deploy/deploy.sh pull     # git pull, pull and pin CI's images, migrate, restart, smoke test
 ```
 
-If `main` moved on since the last green run, `pull` stops with "no web image for <sha> yet": wait for CI and run
-it again.
+If `main` moved on since the last green run, or the server is offline, `pull` stops with "cannot pull the web
+image for <sha>" and exits 75, having changed nothing: wait for CI and run it again.
+
+To release without logging in, see [Automatic releases](#automatic-releases).
 
 The site is down for a few seconds while web restarts, so release outside busy hours. If the release is bad:
 
@@ -420,6 +423,53 @@ Each release:
 Migrations must be expand-only ([expand, migrate, contract](docs/reliability-operations.md#93-expand--migrate--contract)):
 the previous release has to keep working on the new schema, which is what makes rollback safe.
 
+## Automatic releases
+
+On a host that releases with `deploy.sh pull` (staging, or one server with `RELEASE_SOURCE=ci`), a systemd timer
+can release each new commit. It runs after boot and every 5 minutes, so a server that was off or offline catches
+up on its own, at any hour. **Do not install it on a production server that has a staging server**: promotion
+stays a person's decision there.
+
+A commit is released only when both are true: GitHub reports its `CI OK` check as successful, and all four images
+exist. The repository has to be public, because the check reads GitHub's API without a token.
+
+Before enabling it, `deploy.sh pull` must have worked by hand once, and `SMOKE_EMAIL` and `SMOKE_PASSWORD` must be
+set: without a smoke test a broken release could not be detected, so the script refuses to run. Then:
+
+```bash
+sudo sed "s/YOUR_USER/$USER/" /opt/alumini/deploy/systemd/alumini-deploy.service \
+  | sudo tee /etc/systemd/system/alumini-deploy.service >/dev/null
+sudo cp /opt/alumini/deploy/systemd/alumini-deploy.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now alumini-deploy.timer
+journalctl -u alumini-deploy -f
+```
+
+`sudo systemctl stop alumini-deploy.timer` pauses it; `disable` as well to keep it off across reboots.
+
+| What happens                                         | What it does                                                       |
+| ---------------------------------------------------- | ------------------------------------------------------------------ |
+| CI running or failed, or images missing              | Waits. It never goes back to an older green commit                 |
+| Server off                                           | Checks 3 minutes after boot, once the live release is ready        |
+| No internet, or GitHub or the registry is down       | Stops and tries again; the commit is not marked failed             |
+| Connection drops during a pull                       | The same: nothing has changed yet (`deploy.sh` exits 75)           |
+| Public URL unreachable right after a release         | Tests the app directly and logs `smoke=pass-local`                 |
+| Migration fails                                      | Previous release keeps running; the commit is not retried          |
+| New release not ready, or the smoke test fails       | Rolls back; the commit is not retried, the next commit is released |
+| Power cut during a release                           | Returns to the last completed release, then releases forward again |
+| Registry refuses the login, or the clone has changes | Stops and reports it                                               |
+
+`promote` does not accept `smoke=pass-local`: that test did not go through TLS and the proxy.
+
+A release can restart the site for a few seconds at a busy hour, and migrations run with nobody watching, so they
+must stay expand-only. A commit that changes the postgres image restarts it, which fails a backup running at that
+moment; the next scheduled backup picks up.
+
+`auto-deploy.sh` exports metrics to the textfile directory from step 8 (`BACKUP_METRICS_DIR`, in `.env` if you moved it). The
+alerts are in [`ops/prometheus/rules/releases.yml`](../ops/prometheus/rules/releases.yml), and
+[runbook R-16](../ops/runbooks/R-16.md) covers them. Monitoring runs on this host, so a server that is fully off
+is reported only by the dead-man's switch and the external uptime check from step 9.
+
 ## Rollback
 
 ```bash
@@ -434,6 +484,10 @@ migration, never by rolling the schema back.
 
 To return to the newer release, `promote` it again (or `pull` on staging). To stay on the old one, revert
 the bad commit on `main` and release that.
+
+With [automatic releases](#automatic-releases), a rollback holds back the commit you left, so the timer does not
+bring it back; `rm deploy/.auto-deploy-failed` releases it again. A newer commit on `main` still goes out on its
+own: `sudo systemctl stop alumini-deploy.timer` first if nothing should.
 
 ## Operating
 
