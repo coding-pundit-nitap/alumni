@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "nodemailer": "^10.1.5"
+    "nodemailer": "^10.1.6"
   },
   "devDependencies": {
     "@nitap/testing": "workspace:*",
